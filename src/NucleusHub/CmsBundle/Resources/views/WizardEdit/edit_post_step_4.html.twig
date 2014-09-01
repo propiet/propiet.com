@@ -1,0 +1,46 @@
+<div class="row setup-content" id="step-4">
+<div class="container">
+  <div class="col-xs-12 well">
+  
+  	<form>
+  		<div class="panel panel-info">
+		  <div class="panel-heading">
+		    <h3 class="panel-title"><span class="glyphicon glyphicon-picture"> Carga de Imágenes</h3>
+		  </div>
+		  <div  class="panel-body">
+		    <div class="well">Maxímo de Imágenes: <span class="label label-warning">15</span> | Peso Máximo: <span class="label label-warning">5 MB</span> | Formatos: <span class="label label-warning">JPG</span> <span class="label label-warning">JPEG</span> <span class="label label-warning">PNG</span></div>
+		  	<div id="queue"></div>
+			<input id="file_upload" name="file_upload" type="file" multiple="true">
+		  </div>
+		</div>
+		<div class="panel panel-success">
+		  <div class="panel-heading">
+		    <h3 class="panel-title"><span class="glyphicon glyphicon-picture"> Imágenes Actuales</h3>
+		  </div>
+		  <div  class="panel-body">
+		    <div class="row" id="images-row">
+		      {% if (post.images) %}
+			      {% for p in post.images %}
+				  <div class="col-xs-6 col-md-3">
+				    <a href="#" id="image-{{p.id}}" class="thumbnail">
+				      <img src="http://api.propiet.com/media/{{p.file}}" alt="...">
+				    </a>
+				    <a href="#" class="deleteImg" data-id="{{p.id}}">Eliminar</a>
+				  </div>			  
+				  {% endfor %}
+			  {% endif %}
+			</div>
+		  </div>
+		</div>
+		
+		<div class="row">
+		    <div class="col-md-2 col-md-offset-5">
+		    	<a href="/admin/publicaciones" class="btn btn-success btn-lg" role="button">
+		    		<span class="glyphicon glyphicon-share-alt"></span> Ir a Publicaciones
+		    	</a>			
+		    </div>
+		</div>
+	</form>
+  </div>
+</div>
+</div>

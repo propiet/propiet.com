@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% block title %}
+      <title>Propiet</title>
+    {% endblock %}
+    {% block meta %}
+    {% endblock %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Css Override -->
+    <link href="{{ asset('/css/style.css') }}" rel="stylesheet" media="screen">
+    <!-- Bootstrap -->
+    
+    <link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet" media="screen">
+    <link href="{{ asset('/css/offcanvas.css') }}" rel="stylesheet" media="screen"> 
+
+    {% block css %}  
+    {% endblock %}
+        <!-- jQuery (necessary for Bootstraps JavaScript plugins) -->
+    <script src="{{ asset('/js/jquery.js') }}"></script>
+    <!-- Include all JavaScripts, compiled by Assetic -->
+    <script src="{{ asset('/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('/js/bootstrap_dropdown_19.js') }}"></script>
+    <!-- HTML5 Shim and Respond.js add IE8 support of HTML5 elements and media queries -->
+    {% include 'BraincraftedBootstrapBundle::ie8-support.html.twig' %}
+</head>
+<body>
+  <div id="wrap">
+    <nav class="navbar navbar-fixed-top propiet-nav" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{{path("homepage")}}"> <img src="{{asset('bundles/nucleushubcms/images/whiteLogo.png') }}" class="navbar-logo"><strong>Propiet</strong> <small>(BETA)</small></a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+          <ul class="nav navbar-nav">
+            {% block navbarLeft %}
+               <!-- <li>
+                    <a id="alertQueries"href="#">
+                        <span class=" disabled  glyphicon glyphicon-search"></span>
+                    </a>
+                </li>
+               -->
+                <li><a href="{{url('public_search_sell_categ') }}/_ciudad_capital-federal">Venta</a></li>
+                <li><a href="{{url('public_search_rent_categ') }}/_ciudad_capital-federal">Alquiler</a></li>            
+                <li><a href="{{url('public_search_entrepreneurship_categ') }}/_ciudad_capital-federal">Emprendimientos</a></li>
+            {% endblock %}
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {% block navbarRight %}
+                <li><a href="#"><span class="glyphicon glyphicon-phone-alt"></span> <strong>(011)4706-3466</strong></a></li>
+              {% if (app.user) %}
+                <li><a href="{{url('admin_publications_list') }}"><span class="glyphicon glyphicon-th-list"></span> Publicaciones</a></li>
+                <li><a href="{{url('admin_saved_query_list') }}"><span class="glyphicon glyphicon-search"></span>B&uacute;squedas</a></li>
+                <li><a href="/admin/perfil"><span class="glyphicon glyphicon-user"></span>Mi Perfil</a></li>
+                <li><a href="{{url('user_security_logout') }}"><span class="glyphicon glyphicon-log-out"></span>Salir</a></li>
+              {% else %}
+                <li><a href="{{url('user_security_login') }}"><span class="glyphicon glyphicon-log-in"></span> Ingresar</a></li>
+                <li><a href="{{url('user_security_registration') }}"><span class="glyphicon glyphicon-ok-circle"></span> Registro</a></li>
+                <li><a href="{{url('price_your_home') }}"><span class="glyphicon glyphicon-stats"></span> Tasaciones</a></li>
+              {% endif %}
+            {% endblock %}
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container -->
+    </nav>
+    {% block carousel %}
+    {% endblock %}
+    <div class="container">    
+      {% block breadcum %}
+      {% endblock %}
+      {% block content %}
+      {% endblock %}
+    </div><!--/.container-->   
+    {% block js %}
+    {% endblock %}
+        <script src="{{ asset('bundles/nucleushubcms/js/propiet/alerts.js') }}"></script>
+  </div>
+  <div id="footer">
+  <div class="container">
+
+        <p class="navbar-text pull-right text-muted credit"> <span class="glyphicon glyphicon-phone-alt"></span> 011-4706-3466  &middot; <span class="glyphicon glyphicon-envelope"></span> contacto@propiet.com  &middot;  <span class="glyphicon glyphicon-info-sign"></span> Matr&iacute;cula Nº 469 CUCICBA</p>
+
+        <p class="navbar-text pull-left text-muted credit">&copy; 2014 Propiet &middot; <a href="/privacidad">Privacidad</a> &middot; <a href="/terminos-condiciones">T&eacute;rminos</a></p>
+  </div>
+</div>
+</body>
+</html>

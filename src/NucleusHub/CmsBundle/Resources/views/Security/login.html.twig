@@ -1,0 +1,64 @@
+{% extends "NucleusHubCmsBundle::layout.html.twig" %}
+{% block title %}
+  <title>Propiet &middot; Ingresar</title>
+{% endblock %}
+{% block meta %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+    {#
+        If you want to control the URL the user
+        is redirected to on success (more details below)
+        <input type="hidden" name="_target_path" value="/account" />
+    #}
+{% block breadcum %}
+    <div class="row">
+        {% include 'NucleusHubCmsBundle:Widget:breadcrumb.html.twig' with {'routes': routes} %}
+    </div>
+{% endblock %}
+{% block content %}
+<div class="row">
+<div class="container">
+    {% if error %}
+    <div class="alert alert-danger alert-dismissable">
+        <strong>Error!</strong>, Email o Contraseña inválidos, vuelva a ingresar.
+    </div>
+    {% endif %}
+    {% if success == 1 %}
+    <div class="alert alert-success alert-dismissable">
+        <strong>Exito!</strong> Su cuenta ya se encuentra verificada, Ingrese sus datos para entrar.
+    </div>
+    {% endif %}
+        <div class="col-md-4 col-md-offset-4 well well-sm">
+            <legend><img src="{{asset('bundles/nucleushubcms/images/logo.jpg') }}" alt=""/> Ingresar!</legend>
+                    <form name="form" action="{{ path('user_security_check') }}" method="post"> 
+                        <div class="form-group {% if error %}has-error{% endif %}">
+                            <input  id="username" name="_username" type="text" placeholder="Ingrese su e-mail..." class="form-control" minlength="2" maxlength="40" required />
+                           {% if error %}<p class="help-block error">Este campo es requerido.</p>{% endif %}
+                        </div>
+                           <div  class="form-group {% if error %}has-error{% endif %}">
+                             <input id="password" name="_password" class="form-control"  placeholder="Ingrese su contraseña..." type="password" ng-model="password" ng-minlength="8" ng-maxlength="20"  required />
+                                {% if error %}<p class="help-block error">Este campo es requerido.</p>{% endif %}
+                            </div>
+                        <label class="checkbox">
+                            <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                            Recordarme
+                        </label>
+                        <button class="btn btn-lg btn-block btn-danger" type="submit">Ingresar</button>
+                    </form>
+                    <a class="forgotLnk" href="{{ path('user_security_forgot_password') }}">No puedo acceder a mi cuenta</a>
+                    <!--<div class="or-box">
+                        <span class="or">O entrar con</span>
+                        <div class="row">
+                            <div class="col-md-6 row-block">
+                                <a href="#" class="btn btn-facebook btn-block">Facebook</a>
+                            </div>
+                            <div class="col-md-6 row-block">
+                                <a href="#" class="btn btn-google btn-block">Google</a>
+                            </div>
+                        </div>
+                    </div>!-->
+                
+            </div>
+     </div>
+</div>
+{% endblock %}

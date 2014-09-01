@@ -1,0 +1,93 @@
+<div class="row setup-content" id="step-1">
+<div class="container">
+  <div class="col-xs-12 well">
+    <form id="form-step-1" class="form-horizontal" role="form" novalidate="novalidate">
+        <div class="panel panel-info">
+		  <div class="panel-heading">
+		    <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span> Ubicaci&oacute;n</h3>
+		  </div>
+		  <div id="step1-container" class="panel-body">
+		    <div class="col-md-4">
+			  	<div class="form-group">
+	                <label for="country" class="col-sm-4 control-label">Pais</label>
+	                <div class="col-sm-8">
+	                  <select id="countries" name="country" disabled="disabled" class="form-control">
+	                    <option value="1" selected>Argentina</option>
+	                  </select>
+	                </div>
+	            </div>
+            </div>
+		    <div class="col-md-4">
+			  	<div class="form-group">
+	                <label for="region" class="col-sm-4 control-label">Region</label>
+	                <div class="col-sm-8">
+	                  <select id="regions" name="region" disabled="disabled" class="form-control">
+	                    <option value="1" selected>Capital Federal</option>
+	                  </select>
+	                </div>
+	            </div>
+            </div>
+            <div class="col-md-4">
+	            <div class="form-group">
+	                <label for="city" class="col-sm-4 control-label">Ciudad / Barrio</label>
+	                <div class="col-sm-8">
+	                  <select id="cities" name="city" required class="form-control">	                    
+	                  </select>
+	                </div>
+	            </div>
+            </div>
+            <div class="col-md-8">
+			  	<div class="form-group">
+	                <label for="address" class="col-sm-2 control-label">Direcci&oacute;n</label>
+	                <div class="col-sm-10">
+	                  <input name="address" type="text" required class="form-control" data-parsley-required-message="Este campo es requerido" placeholder="Ingrese calle y n&uacute;mero">
+	                </div>
+	            </div>
+            </div>
+		  </div>		  
+		</div>
+		<div class="panel panel-info">
+		  <div class="panel-heading">
+		    <h3 class="panel-title"><span class="glyphicon glyphicon-list-alt"></span> T&iacute;tulo y Descripción</h3>
+		  </div>
+		  <div id="step1-2-container" class="panel-body">
+		  <div class="col-md-11 col-md-offset-1">
+            <div class="col-md-10">
+			  	<div class="form-group">
+	                <label for="title" class="col-md-2 control-label">T&iacute;tulo</label>
+	                <div class="col-md-10">
+	                  <input name="title" type="text" required class="form-control" data-parsley-required-message="Este campo es requerido" placeholder="Ingrese el titulo de la publicaci&oacute;n">
+	                </div>
+	            </div>
+            </div>
+            <div class="col-md-10">
+			  	<div class="form-group">
+	                <label for="description" class="col-md-2 control-label">Descripci&oacute;n</label>
+	               <div class="col-md-10">
+	                  <textarea name="description" class="form-control counted" rows="6" required data-parsley-required-message="Este campo es requerido" placeholder="Ingrese una breve descripci&oacute;n"></textarea>	                  
+                      <h4 class="pull-right" id="counter">5000 caracteres.</h4>                  
+	              </div>
+	            </div>
+            </div>
+            {% if user.roles[0] == 'ROLE_AGENT' or user.roles[0] == 'ROLE_COMPANY' %}  
+            <div class="col-md-10">
+			  	<div class="form-group">
+	                <label for="hidden_note" class="col-md-2 control-label">Nota Interna</label>
+	               <div class="col-md-10">
+	                  <textarea name="hidden_note" class="form-control" rows="6" placeholder=""></textarea>         
+	              </div>
+	            </div>
+            </div>
+            {% endif %}
+            </div>
+		  </div>
+		</div>
+		<div class="row">		
+		    <div class="col-md-6 col-md-offset-3 mb3">
+	      		<button id="activate-step-2" type="submit" class="btn btn-info btn-lg btn-block" disabled="disbled">		Siguiente <span class="glyphicon glyphicon-circle-arrow-right"></span></button>
+	  		</div>
+  		</div>  
+    </form>
+  </div>
+</div>
+</div>

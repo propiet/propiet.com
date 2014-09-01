@@ -1,0 +1,28 @@
+{% extends "NucleusHubCmsBundle::layout.html.twig" %}
+{% block title %}
+  <title>Propiet &middot; Crear Publicaci&oacute;n</title>
+{% endblock %}
+{% block meta %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+{% block breadcum %}    
+        {% include 'NucleusHubCmsBundle:Widget:breadcrumb.html.twig' with {'routes': routes} %}    
+{% endblock %}
+
+{% block content %}
+    {% include 'NucleusHubCmsBundle:Wizard:create_post.html.twig' with {'user': user} %}
+{% endblock %}
+
+{% block js %}
+  <script src="{{ asset('bundles/nucleushubcms/js/lib/parsley.min.js') }}"></script>
+  <script src="{{ asset('bundles/nucleushubcms/js/propiet/wizard.js') }}"></script>
+  <script src="{{ asset('bundles/nucleushubcms/js/propiet/button-checkbox.js') }}"></script>
+  <script src="{{ asset('bundles/nucleushubcms/js/propiet/char-counter.js') }}"></script>
+  <script src="{{ asset('bundles/nucleushubcms/js/lib/jquery.uploadify.min.js') }}"></script>
+  <script type="application/javascript">
+    $( document ).ready(function() {
+        var path = "{{ asset('bundles/nucleushubcms/js/lib/uploadify.swf') }}";        
+        wizard.init(path);
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,18 @@
+div class="col-sm-3 col-md-2">             
+   <ul class="nav nav-pills nav-stacked">   
+   {% if user.roles[0] == 'ROLE_USER' or user.roles[0] == 'ROLE_COMPANY' %}              
+          <li {% if (routes[1]['title'] == 'Nuevas')%}class="active"{% endif %}><a href="{{url('admin_publications_list')}}"><span class="glyphicon glyphicon-asterisk"></span> Nuevas</a></li>
+   {% endif %}           
+   {% if user.roles[0] == 'ROLE_AGENT' %}
+          <li {% if (routes[1]['title'] == 'De Terceros')%}class="active"{% endif %}><a href="{{url('admin_publications_list')}}"><span class="glyphicon glyphicon-globe"></span> De Terceros test</a></li>
+          <li {% if (routes[1]['title'] == 'Asignadas')%}class="active"{% endif %}><a href="{{url('admin_publications_list_assigned')}}"><span class="glyphicon glyphicon-pushpin"></span> Asignadas</a></li>
+          <li {% if (routes[1]['title'] == 'Nuevas')%}class="active"{% endif %}><a href="{{url('admin_publications_list_new')}}"><span class="glyphicon glyphicon-asterisk"></span> Nuevas</a></li>                   
+   {% endif %}
+          <li {% if (routes[1]['title'] == 'Publicadas')%}class="active"{% endif %}><a href="{{url('admin_publications_list_published')}}"><span class="glyphicon glyphicon-ok"></span> Publicadas</a></li>
+          <li {% if (routes[1]['title'] == 'Pausadas')%}class="active"{% endif %}><a href="{{url('admin_publications_list_paused')}}"><span class="glyphicon glyphicon-pause"></span> Pausadas</a></li>                  
+          <li {% if (routes[1]['title'] == 'Finalizadas')%}class="active"{% endif %}><a href="{{url('admin_publications_list_sold')}}"><span class="glyphicon glyphicon-stop"></span> Finalizadas</a></li>
+          <li {% if (routes[1]['title'] == 'Archivadas')%}class="active"{% endif %}><a href="{{url('admin_publications_list_inactive')}}"><span class="glyphicon glyphicon-folder-close"></span> Archivadas</a></li>
+   </ul>
+</div>
+
+{% endblock %}

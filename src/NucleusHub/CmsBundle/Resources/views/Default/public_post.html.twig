@@ -1,0 +1,336 @@
+{% extends "NucleusHubCmsBundle::layout.html.twig" %}
+{% block css %}  
+{% endblock %}
+{% block title %}
+    <title>Propiet &middot; Publicaci&oacute;n</title>
+{% endblock %}
+{% block meta %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+
+{% block breadcum %}
+    <div class="row">
+        {% include 'NucleusHubCmsBundle:Widget:breadcrumb.html.twig' with {'routes': routes} %}
+    </div>
+    <div class="hide alert alert-success alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <strong>Mensaje enviado exitosamente</strong>.
+    </div>
+    <div class="hide alert alert-danger alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <strong>Error al enviar</strong> intente nuevamente.
+    </div>
+    {% if (data.agent == null) %}
+    <div class="alert alert-warning">
+      <strong>Pre-visualización de la publicación.</strong>
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+            <div class="col-md-3">
+                {% if (data.agent) %}
+                <div class="list-group panel panel-default">
+                    <div class="panel panel-default mBottom0">
+                        <div class="panel-heading">
+                          <h3 class="panel-title">
+                              <img with="25" height="25" src="{{asset('bundles/nucleushubcms/images/logoHouse.png') }}" alt="Propiet">
+                              Agente</h3>
+                        </div>
+                        <div class="panel-body">
+                          <ul>
+                            <li>
+                                <span class="glyphicon glyphicon-user"></span>
+                                {{data.agent.first_name}} {{data.agent.last_name}}
+                            </li>
+                            <li><span class="glyphicon glyphicon-envelope"></span> {{data.agent.email}} </li>
+                            <li><span class="glyphicon glyphicon-earphone"></span> {{data.agent_profile.phone}}</li>
+                          </ul>
+                        </div>
+                    </div>
+                    <div class="panel panel-default mBottom0">
+                        <div class="panel-heading">
+                              <h3 class="panel-title">
+                                  <span class="main-circle-icon"><i class="glyphicon glyphicon-envelope"></i></span>
+                                  Contactar Agente
+                              </h3>
+                        </div>
+                            <div class="panel-body">
+                                <form id="form-contact" role="form">
+                                    <div class="form-group">
+                                      <label for="name">Nombre y Apellido</label>
+                                      <input name="name" type="text" class="form-control" id="name" placeholder="Ingrese su nombre">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="phone">Tel&eacute;fono</label>
+                                      <input name="phone" type="tel" class="form-control" id="phone" placeholder="1136707659">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="email">Email</label>
+                                      <input name="email" type="email" class="form-control" id="email" placeholder="email@ejemplo.com">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="message">Mensaje</label>
+                                      <textarea name="message" id="message" class="form-control" rows="3"></textarea>
+                                    </div>
+                                    <input name="agent" type="hidden"  id="agent" value="{{data.agent.id}}" >
+                                    <input name="post" type="hidden"  id="post" value="{{post_url}}" >
+                                </form>
+                                <button id="btn-submit" class="btn btn-default">Enviar</button>
+                            </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="panel panel-default mBottom0">
+                        <div class="panel-heading">
+                          <h3 class="panel-title">
+                              <img with="25" height="25" src="{{asset('bundles/nucleushubcms/images/logoHouse.png') }}" alt="Propiet">
+                              Agente</h3>
+                        </div>
+                        <div class="panel-body">
+                                <p>Esta propiedad todavia no fue asignada a un agente.</p>
+                        </div>
+                    </div>
+                {% endif %}
+             </div>
+
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs">
+                              <li class="active"><a href="#photos" data-toggle="tab">Fotos</a></li>
+                              <li><a href="#map"  data-toggle="tab">Mapa</a></li>
+                              <li><a href="#features"  data-toggle="tab">Caracter&iacute;sticas</a></li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                              <div class="tab-pane active" id="photos">
+
+                                <div class="panel panel-default">
+                                  <div class="panel-heading">
+                                    <h2 class="panel-title fsize35 mBottom10">
+                                        {{data.location.address|capitalize|raw}},{{data.post_data.city.name|capitalize|raw}},{{data.post_data.region.name|capitalize|raw}}
+                                    </h2>
+                                    <h1 class="panel-title fsize35">
+                                        <strong>
+                                        {{data.post_data.operation.name}}-
+                                        {% if data.post_data.currency.id == 1 %}
+                                        ARG$
+                                        {% else %}
+                                        US$
+                                        {% endif %}
+                                         {{data.post.price|number_format(2, '.', ',')}}
+                                        </strong>
+                                    </h1>
+                                    
+                                  </div>
+                                  <div class="panel-body">
+                                     <div id="my-carousel" class="carousel slide">
+                                        <!-- indicators -->
+                                        <ol class="carousel-indicators">
+                                            {% if data.post_images%}
+                                            {% for i,element in data.post_images %}
+                                                <li data-target="#my-carousel" data-slide-to="{{i}}" class="{% if i == 0 %}active{% endif %}"></li>
+                                            {% endfor %}
+                                                {% else %}
+                                                    <li data-target="#my-carousel" data-slide-to="0" class="active"></li>
+                                                {% endif %}    
+                                        </ol>
+                                        <!-- carousel -->
+                                        <div class="carousel-inner">
+                                            {% if data.post_images%}
+                                            {% for i,element in data.post_images %}
+                                                <div class="item {% if i == 0 %}active{% endif %}">
+                                                    <img class="img-responsive" src="http://api.propiet.com/media/{{element.file}}"/>
+                                                 </div><!-- /.item -->
+                                            {% endfor %}
+                                                {% else %}
+                                                    <div class="item active">
+                                                        <img class="img-responsive" src="{{asset('bundles/nucleushubcms/images/not_img.jpg') }}"/>
+                                                     </div><!-- /.item -->
+                                                {% endif %}
+                                        </div><!-- /.carousel-inner -->
+                                        <!-- Controls -->
+                                        <a class="left carousel-control" href="#my-carousel" data-slide="prev">
+                                                <span class="glyphicon glyphicon-chevron-left"></span>
+                                        </a>
+                                        <a class="right carousel-control" href="#my-carousel" data-slide="next">
+                                                <span class="glyphicon glyphicon-chevron-right"></span>
+                                        </a>
+                                     </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="tab-pane" id="map">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                    <h2 class="panel-title fsize35 mBottom10">
+                                        {{data.location.address|capitalize|raw}},{{data.post_data.city.name|capitalize|raw}},{{data.post_data.region.name|capitalize|raw}}
+                                    </h2>
+                                    <h1 class="panel-title fsize35">
+                                        <strong>
+                                        {{data.post_data.operation.name}}-
+                                        
+                                        {% if data.post_data.currency.id == 1 %}
+                                        ARG$
+                                        {% else %}
+                                        US$
+                                        {% endif %}
+                                         {{data.post.price|number_format(2, '.', ',')}}
+                                        </strong>
+                                    </h1>
+                                    
+                                  </div>
+                                  <div class="panel-body">
+                                          <div class="well">
+                                                <div class="row-fluid">
+                                                        <div class="span8">
+                                                                <img src="http://maps.googleapis.com/maps/api/staticmap?center= {{data.location.address}} +{{data.post_data.city.name}}+Capital&iwloc=A&gl=AR&hl=es&markers=color:red&zoom=14&size=600x300&maptype=roadmap&sensor=false" width="100%" height="350" frameborder="0" 
+                            scrolling="no" marginheight="0" marginwidth="0"  style="color:#0000FF;text-align:left">
+                                                        </div>
+
+                                                        <div class="span4">
+                                                                <address>
+                                                                        {{data.location.address|capitalize}} <br>
+                                                                        Buenos Aires<br>
+                                                                        Capital Federal<br>
+                                                                        Argentina<br>
+                                                                </address>
+                                                        </div>
+                                                    </div>
+                                               
+                                             </div>
+                                        </div>
+                                    </div>
+                              </div>
+                              <div class="tab-pane" id="features">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                    <h2 class="panel-title fsize35 mBottom10">
+                                        {{data.location.address|capitalize|raw}},{{data.post_data.city.name|capitalize|raw}},{{data.post_data.region.name|capitalize|raw}}
+                                    </h2>
+                                    <h1 class="panel-title fsize35">
+                                         <strong>
+                                        {{data.post_data.operation.name}}-
+                                        {% if data.post_data.currency.id == 1 %}
+                                        ARG$
+                                        {% else %}
+                                        US$
+                                        {% endif %}
+                                        {{data.post.price|number_format(2, '.', ',')}}
+                                        </strong>
+                                    </h1>
+                                    
+                                  </div>
+                                  <div class="panel-body">
+                                    {% if data.post_ambiences %}
+                                    <div class="caption-full">
+                                        <h4 class="pull-right"></h4>
+                                        <h4><strong>Ambientes</strong>
+                                        </h4>
+                                        <p>
+                                         {% for ambience in data.post_ambiences %}      
+                                            <span class="label label-primary">{{ambience.name}}</span>                  
+                                         {% endfor %}
+                                        </p>
+                                    </div>
+                                    {% else %}
+                                     <div class="caption-full">
+                                        <h4 class="pull-right"></h4>
+                                        <h4><strong>Ambientes</strong>
+                                        </h4>
+                                        <p>N/A</p>
+                                     </div>
+                                    {% endif %}
+                                    {% if data.post_features %}
+                                    <div class="caption-full">
+                                        <h4 class="pull-right"></h4>
+                                        <h4><strong>Caracter&iacute;sticas</strong>
+                                        </h4>
+                                        <p>
+                                         {% for feature in data.post_features %}        
+                                            <span class="label label-primary">{{feature.name}}</span>                   
+                                         {% endfor %}
+                                        </p>
+                                    </div>
+                                    {% else %}
+                                    <div class="caption-full">
+                                        <h4 class="pull-right"></h4>
+                                         <h4><strong>Caracter&iacute;sticas</strong>
+                                        </h4>
+                                        <p>N/A</p>
+                                     </div>
+                                    {% endif %}
+                                    {% if data.post_services %}
+                                    <div class="caption-full">
+                                        <h4 class="pull-right"></h4>
+                                        <h4><strong>Servicios</strong>
+                                        </h4>
+                                        <p>
+                                         {% for service in data.post_services %}        
+                                            <span class="label label-primary">{{service.name}}</span>                   
+                                         {% endfor %}
+                                        </p>
+                                    </div>
+                                    {% else %}
+                                    <div class="caption-full">
+                                        <h4 class="pull-right"></h4>
+                                         <h4><strong>Servicios</strong>
+                                        </h4>
+                                         <p>N/A</p>
+                                     </div>
+                                    {% endif %}
+                                    <div class="caption-full">
+                                        <h4 class="pull-right"></h4>
+                                        <h4><strong>Informaci&oacute;n General</strong>
+                                        </h4>
+                                        <p>
+                                            <ul id="generalFeatures">
+                                             
+                                            </ul>
+                                        </p>
+                                    </div>
+                              </div>
+                              </div>
+                            </div>
+                            
+                            <div class="caption-full">
+                                <h2><strong>Descripci&oacute;n</strong></h2>
+                                <p>
+                                {% if data.post.description and data.post.description|length > 10 %}
+                                    {{data.post.description|raw}}
+                                {% else %}
+                                    No disponible
+                                {% endif %}
+                                </p>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                
+
+                </div>
+
+            </div>
+
+        </div>
+        <script src="{{ asset('bundles/nucleushubcms/js/lib/parsley.min.js') }}"></script>
+<script src="{{ asset('bundles/nucleushubcms/js/propiet/public-post.js') }}"></script>
+<script type="application/javascript">
+    $( document ).ready(function() {    
+        publicPost.init();
+        publicPost.formDataParse('{{features|escape('js')}}');
+    });
+</script>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

@@ -1,0 +1,296 @@
+{% extends "NucleusHubCmsBundle::layout.html.twig" %}
+{% block css %}  
+<link href="{{ asset('/css/modalCities.css') }}" rel="stylesheet" media="screen">
+<link href="{{ asset('/css/searchResultsNormal.css') }}" rel="stylesheet" media="screen">
+<link href="{{ asset('/css/accordionListGroupMenu.css') }}" rel="stylesheet" media="screen">
+<link href="{{ asset('/css/image-caption.css') }}" rel="stylesheet" media="screen">
+{% endblock %}
+{% block title %}
+  <title>Propiet &middot; Buscar</title>
+{% endblock %}
+{% block meta %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+
+{% block breadcum %}
+    <div class="row">
+        {% include 'NucleusHubCmsBundle:Widget:breadcrumb.html.twig' with {'routes': routes} %}
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+     <div class="container-fluid">
+        <div id="containerFilter" class="col-sm-3 col-md-3">              
+            <a id="saveQuery" type="button" class="btn btn-danger btn-lg btn-block mBottom20"><h4><span class="glyphicon glyphicon-search"></span> Guardar B&uacute;squeda</h4></a>
+          <div class="panel-group" id="accordion">
+             <!-- filter -->
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <span>Filtros aplicados</span>
+                </h4>
+              </div>
+              <div id="filter">
+                  {% if filters %}
+                       {% if filters.region %}
+                            <div data-filteregion="{{filters.region}}" class="alert-filter fade in">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            {{filters.region}}
+                            </div>
+                        {% endif %} 
+                        {% if filters.cities %}
+                            {% for city in filters.cities %}
+                                {% if city %}
+                                    <div data-filtercity="{{city}}" class="alert-filter fade in">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                    {{city}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if filters.currency %}
+                            <div data-filtercr="_cr_{{filters.currency}}" class="alert-filter fade in">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            {{filters.currency == 1? 'Pesos' : 'Dolar'}}
+                            </div>
+                        {% endif %}
+                        {% if filters.priceMin and filters.priceMax%}
+                            <div data-filterpminmax="_pmin_{{filters.priceMin}}_pmax_{{filters.priceMax}}" class="alert-filter fade in">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            ${{filters.priceMin}} a ${{filters.priceMax}}
+                            </div>
+                        {% elseif filters.priceMin %}
+                            <div data-filterpmin="_pmin_{{filters.priceMin}}" class="alert-filter fade in">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            ${{filters.priceMin}}
+                            </div>
+                        {% elseif filters.priceMax %}
+                            <div data-filterpmax="_pmax_{{filters.priceMax}}" class="alert-filter fade in">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            ${{filters.priceMax}}
+                            </div>
+                        {% endif %}
+                        {% if filters.category%}
+                            <div data-filtercategory="{{filters.category|replace({' ':'-',',':''})}}" class="alert-filter fade in">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            {{filters.category|replace({'-':' '})}}
+                            </div>
+                        {% endif %} 
+                        {% if filters.operation%}
+                            <div data-filteroperation="{{filters.operation}}" class="alert-filter fade in">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            {{filters.operation}}
+                            </div>
+                        {% endif %}
+                  {% else %}
+                      <span>No hay filtros aplicados</span>
+                  {% endif %}
+              </div>
+            </div>
+            <!-- filter -->
+            
+            
+            
+             <!-- category -->
+             <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseCategories" class="collapsed">Filtros</a>
+                </h4>
+              </div>
+              <div id="collapseCategories" class="panel-collapse collapse in">
+                   <!-- category -->
+                  <dl class="filters">
+                        {% if searchList["category"] %}
+                            <dt>Tipo de Propiedad</dt>
+                            <div class="filterWrap">
+                                {% for key,value in searchList["category"] %}
+                                    <dd> 
+                                        <a href="#" id="{{value.id}}" data-category="{{value.name|lower|replace({' ':'-',',':''})}}" >
+                                            {{value.name|capitalize}}</a><em></em>	
+                                    </dd>
+                                {% endfor %}
+                            </div>                                  
+                        {% endif %}
+                    </dl>
+                     <!-- category -->
+                     
+                     <!-- operation -->
+                    <dl class="filters">
+                        {% if searchList["operation"] %}
+                            <dt>Operacion</dt>
+                            <div class="filterWrap">
+                                {% for key,value in searchList["operation"] %}
+                                    <dd> 
+                                        <a href="#" id="{{value.id}}" data-operation="{{value.operation|lower}}" >
+                                            {{value.operation|capitalize}}</a><em></em>	
+                                    </dd>
+                                {% endfor %}
+                            </div>                                  
+                        {% endif %}
+                    </dl>
+                    <!-- operation -->
+                    
+                    <!-- cities -->
+                    <dl class="filters">
+                        {% if searchList["city"] %}
+                            <dt>Barrios</dt>
+                            <div id="citiesFilters" class="filterWrap">
+                                {% if searchList["city"]|length > 6 %}
+                                        {% for key,value in searchList["city"][0:5] %}
+                                            <dd> 
+                                                <a href="#"  id="{{value.id}}" data-city="{{value.name}}" >
+                                                    {{value.name|capitalize}}</a><em></em>	
+                                            </dd>
+                                        {% endfor %}
+                                        <dd> 
+                                            <a data-toggle="collapse" data-parent="#citiesFilters" href="#collapseCities" class="collapsed" >M&aacute;s Opciones<span class="caret"></span></a>
+                                        </dd>
+                                        <div id="collapseCities" class="panel-collapse collapse">
+                                            {% for key,value in searchList["city"][5:] %}
+
+                                                    <dd> 
+                                                        <a href="#"  id="{{value.id}}" data-city="{{value.name}}" >
+                                                            {{value.name|capitalize}}</a><em></em>	
+                                                    </dd>
+                                            {% endfor %}
+                                        <div>
+                                {% else %}
+                                   {% for key,value in searchList["city"] %}
+                                        <dd> 
+                                            <a href="#"  id="{{value.id}}" data-city="{{value.name}}" >
+                                                {{value.name|capitalize}}</a><em></em>	
+                                        </dd>
+                                    {% endfor %}
+                                {% endif %}
+                                
+                            </div>                                  
+                        {% endif %}
+                    </dl>
+                    <!-- cities -->
+                    
+                     <!-- price -->
+                    <dl class="filters">
+                            <dt>Precio</dt>
+                            <div class="filterWrap">
+                                    <dd>
+
+                                        <div id="priceForm" class="range-filter" action="#" method="get">
+                                         <fieldset>  
+                                           <ul>  
+                                           <li> 
+                                           <label for="fromPrice"> 
+                                           <input type="text" value="{% if filters.priceMin %}{{filters.priceMin}}{% endif %}"  id="pmin" placeholder="desde">
+                                           </label>  
+                                           </li> 
+                                           <li>  
+                                           <label for="toPrice"> 
+                                           <span>&nbsp;-&nbsp;</span>  
+                                           <input type="text" value="{% if filters.priceMax %}{{filters.priceMax}}{% endif %}"  id="pmax" placeholder="hasta">
+                                           </label>  
+                                           </li> 
+                                           </ul> 
+                                         </fieldset> 
+                                         <p class="actions"> 
+                                         <button id="priceBtn" class="btn">></button> 
+                                         </p>
+                                         </div>
+
+                                    </dd>
+                            </div>                                  
+                    </dl>
+                    <!-- price -->
+                    
+              </div>
+            </div>
+            
+            
+            
+          </div>
+        </div>
+        
+        <div id="containerPostList" class="col-sm-9 col-md-9">
+          <div class="panel panel-default">
+
+            <div class="panel-body">
+              
+                 
+        <div id="containerSearch">
+            <div  class="container">
+                <hgroup class="mb20">
+                    <h1>Resultados de la B&uacute;squeda</h1>
+                    {% if countPost > 0 %}  
+                        <h2 class="lead"><strong class="text-danger">{{pagination.count}}</strong> Publicaciones fueron encontradas</h2>
+                    {% else %}
+                        <h2 class="lead"><strong>No hay Publicaciones que coincidan con tu b&uacute;squeda</strong></h2>
+                    {% endif %}
+                </hgroup>
+                <section class="col-xs-12 col-sm-6 col-md-12">
+
+                 {% if countPost > 0 %}    
+                    {% for post in posts %}
+                        <article class="row mTop30">
+                            <div class="col-sm-12 col-md-5">
+                                <div class="property-images">
+                                <a href="{{ url('public_post',{'id':post.id,'title':(post.property.subcategory.name ~ '-' ~  post.property.location.address ~ '-' ~ post.city.name ~ '-' ~ post.region.name)|lower|raw|replace({' ':'-'}) }) }}">
+                                    <div class="mask">
+                                        <div class="desc-type {% if post.operation.id == 1%}for-sale{%elseif post.operation.id == 2 %}for-rent{%else%}for-entrepreneurship{%endif%}">{{post.operation.operation}}</div>
+                                        <div class="price">{{post.currency.symbol}} {{post.price|number_format(2, '.', ',')}}</div>
+                                    </div>
+                                        {% if post['post_photos'] %}
+                                            {% for key,photo in post['post_photos'] %}
+                                                {% if key==0 %}
+                                                    <img  class="img-responsive" href="{{ url('public_post',{'id':post.id,'title':post.title|replace({' ':'-'})}) }}" src="{{photo['file']}}"/>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                             <img  class="img-responsive" href="{{ url('public_post',{'id':post.id,'title':(post.property.subcategory.name ~ '-' ~  post.property.location.address ~ '-' ~ post.city.name ~ '-' ~ post.region.name)|lower|raw|replace({' ':'-'})}) }}" src="{{asset('bundles/nucleushubcms/images/not_img.jpg') }}"/>
+                                        {% endif %}
+                                       
+                                </a>
+                                </div>
+                            </div><!-- /.col -->
+                            <div class="col-sm-12 col-md-7">
+                                    <h3>
+                                        <a href="{{ url('public_post',{'id':post.id,'title':(post.property.subcategory.name ~ '-' ~  post.property.location.address ~ '-' ~ post.city.name ~ '-' ~ post.region.name)|lower|raw|replace({' ':'-'})}) }}">
+                                            {{post.property.subcategory.name}}-{{post.property.location.address|capitalize|raw}}, <span class="text-muted">{{post.city.name|capitalize|raw}}, {{post.region.name|capitalize|raw}}</span>
+                                        </a>
+                                    </h3>
+                                        {% if post.description %}
+                                            <p>{{ post.description|slice(0,200)|raw }}...
+                                            <a href="{{ url('public_post',{'id':post.id,'title':(post.property.subcategory.name ~ '-' ~  post.property.location.address ~ '-' ~ post.city.name ~ '-' ~ post.region.name)|lower|raw|replace({' ':'-'})}) }}" class="">Ver M&aacute;s</a>
+                                            </p>
+                                        {% else %}    
+                                            <p>Descripci&oacute; no disponible</p>
+                                        {% endif %}
+                                    <ul class="list-unstyled">
+                                            <li>
+                                            </li>
+                                    </ul>
+                                    
+                            </div><!-- /.col -->
+                        </article>
+                    {% endfor %}
+                {% endif %}
+                </section>
+                 {% if pagination.count !=0 %}                  
+                      {% include 'NucleusHubCmsBundle:Widget:pagination_search.html.twig' with {'pagination': pagination} %}
+                 {% endif %}
+            </div>
+        </div>
+                
+                
+                
+                
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+<script src="{{ asset('bundles/nucleushubcms/js/propiet/search.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends "NucleusHubCmsBundle::layout.html.twig" %}
+{% block title %}
+  <title>Propiet &middot; Editar Publicaci&oacute;n</title>
+{% endblock %}
+{% block meta %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+{% block breadcum %}    
+        {% include 'NucleusHubCmsBundle:Widget:breadcrumb.html.twig' with {'routes': routes} %}    
+{% endblock %}
+
+{% block content %}
+    {% include 'NucleusHubCmsBundle:WizardEdit:edit_post.html.twig' with {'post': post, 'postForm': postForm, 'user': user} %}
+{% endblock %}
+
+{% block js %}
+  <script src="{{ asset('bundles/nucleushubcms/js/lib/parsley.min.js') }}"></script>
+  <script src="{{ asset('bundles/nucleushubcms/js/propiet/wizardEdit.js') }}"></script>
+  <script src="{{ asset('bundles/nucleushubcms/js/propiet/button-checkbox.js') }}"></script>
+  <script src="{{ asset('bundles/nucleushubcms/js/propiet/char-counter.js') }}"></script>
+  <script src="{{ asset('bundles/nucleushubcms/js/lib/jquery.uploadify.min.js') }}"></script>
+  <script type="application/javascript">
+    $( document ).ready(function() {
+        var city = {{post.post_data.city.id}},
+            category = {{post.post_data.category.id}},
+            subcategory = {{post.property.subcategory.pk}},
+            {% if(post.property.features) %}
+              features = [{% for f in post.property.features %}{{f.pk}},{% endfor %}],
+            {% else %}
+              features = [],
+            {% endif %}
+            {% if(post.property.services) %}
+              services = [{% for f in post.property.services %}{{f.pk}},{% endfor %}],
+            {% else %}
+              services = [],
+            {% endif %}
+            {% if(post.property.ambiences) %}
+              ambiences = [{% for f in post.property.ambiences %}{{f.pk}},{% endfor %}],
+            {% else %}
+              ambiences = [],
+            {% endif %}
+            postId = {{post.post_data.id}},
+            locationId = {{post.location.id}},
+            propertyId = {{post.property.id}},
+            operation = {{post.post_data.operation.id}};
+            
+            wizardEdit.init(city, category, subcategory, features, services, ambiences, postId, locationId, propertyId, operation);
+    });
+  </script>
+  <script type="text/javascript">
+    $(function() {
+      $('#file_upload').uploadify({
+        'formData'     : {
+          'post' : {{post.post_data.id}},          
+        },
+        "swf"      : "{{ asset('bundles/nucleushubcms/js/lib/uploadify.swf') }}",
+        'uploader' : '/api/v1/file/upload.json',
+        'buttonText':'Buscar...',
+        'uploadLimit' : 15,
+        'fileSizeLimit' : '5MB',
+        'fileTypeDesc' : 'Formatos: Jpg, Jpeg, PNG',
+        'onUploadSuccess': function(file, data, response){
+            var $json = $.parseJSON(data);
+            var $row = $('#images-row');
+            $row.append('<div class="col-xs-6 col-md-3"><a href="#" id="image-' + $json.id +'" class="thumbnail"><img src="http://api.propiet.com/media/' +$json.photo +'" alt="..."></a><a href="#" class="deleteImg" data-id="'+$json.id+'">Eliminar</a></div>')
+        },
+        'onUploadComplete' : function(file) {
+            $('#successWizardImage').show();
+        },
+        'onUploadError' : function(file, errorCode, errorMsg, errorString) {
+            $('#errorWizard').show();  
+        }
+      }      
+      );
+    });
+  </script>
+{% endblock %}

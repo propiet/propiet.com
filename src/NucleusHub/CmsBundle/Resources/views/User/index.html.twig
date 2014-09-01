@@ -1,0 +1,51 @@
+{% extends "NucleusHubCmsBundle::layout.html.twig" %}
+{% block title %}
+  <title>Propiet &middot; Publicaciones</title>
+{% endblock %}
+{% block meta %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+{% block breadcum %}    
+        {% include 'NucleusHubCmsBundle:Widget:breadcrumb.html.twig' with {'routes': routes} %}    
+{% endblock %}
+{% block content %}
+    <div class="row mb2">
+      <div class="col-md-12">
+            <h1>{{routes[1]['title']|upper}} {% if (search is defined) %}(Busqueda: {{search}}){% endif %}</h1>
+              <span class="pull-left">
+                {% embed "NucleusHubCmsBundle::User/layout/user_search.html.twig" %}
+                {% endembed %}
+              </span>
+               <span class="pull-right">
+                      <a href="{{url('add_post_user')}}" class="btn btn-lg btn-default">
+                      <span class="glyphicon glyphicon-plus"></span> CREAR</a>
+                      {% if (routes[1]['title'] == 'Asignadas')%}
+                        <a id="button-unassign" href="return false;" class="btn btn-lg btn-default" disabled>
+                        <span class="glyphicon glyphicon-pushpin"></span> REMOVER</a>
+                      {% endif %}
+
+                      {% embed "NucleusHubCmsBundle::User/layout/user_menu.html.twig" %}
+                      {% endembed %}
+                </span>   
+            
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        {% embed "NucleusHubCmsBundle::User/layout/user_posts.html.twig" %}
+        {% endembed %}
+      </div>      
+    </div>
+{% endblock %}
+{% block js %}
+  
+  <script src="{{ asset('bundles/nucleushubcms/js/propiet/button-checkbox.js') }}"></script>
+  <script src="{{ asset('bundles/nucleushubcms/js/propiet/posts.js') }}"></script>
+  <script src="{{ asset('bundles/nucleushubcms/js/propiet/admin.js') }}"></script>
+  <script type="application/javascript">
+    $( document ).ready(function() {
+        buttonCheckbox.init();
+        posts.init();
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,18 @@
+
+<div id="successWizard" class="alert alert-success" style="display:none;">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	<strong>Guardado exitosamente!</strong>.
+</div>
+<div id="successWizardImage" class="alert alert-success" style="display:none;">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	<strong>¡Creado exitosamente!</strong> La Imágen fue añadida a su publicación.
+</div>
+<div id="errorWizard" class="alert alert-danger" style="display:none;">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	<strong>¡Ha ocurrido un error!</strong> Intente nuevamente m&aacute;s tarde.
+</div>
+{% include 'NucleusHubCmsBundle:WizardEdit:edit_post_header.html.twig' %}
+{% include 'NucleusHubCmsBundle:WizardEdit:edit_post_step_1.html.twig' with {'post': post, 'user': user} %}
+{% include 'NucleusHubCmsBundle:WizardEdit:edit_post_step_2.html.twig' with {'post': post, 'postForm': postForm}%}
+{% include 'NucleusHubCmsBundle:WizardEdit:edit_post_step_3.html.twig' with {'post': post, 'postForm': postForm}%}
+{% include 'NucleusHubCmsBundle:WizardEdit:edit_post_step_4.html.twig' with {'post': post, 'postForm': postForm}%}

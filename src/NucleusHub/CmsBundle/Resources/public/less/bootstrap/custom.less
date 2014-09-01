@@ -1,0 +1,431 @@
+/* GLOBAL STYLES
+-------------------------------------------------- */
+/* Padding below the footer and lighter body text */
+
+body {
+  padding-bottom: 0px;
+  padding-top: 50px;
+  margin-bottom: 0px;
+  color: #5a5a5a;
+}
+
+
+
+/* CUSTOMIZE THE NAVBAR
+-------------------------------------------------- */
+.propiet-nav {
+  background-color: #b84d45;
+  margin-bottom: 0px;
+  border-color: #a5423b;
+  box-shadow: 0 1px 0 rgba(255,255,255,.1);
+}
+.navbar {
+ padding-bottom: 0px;
+}
+
+.propiet-nav .navbar-brand {
+  color: #fff;
+}
+
+propiet-nav .navbar-nav > li > a,
+.masthead a {
+  color: #fbdedb;
+}
+
+.propiet-nav .navbar-nav > li > a {
+  padding-top: 15px;
+  padding-bottom: 17px;
+  color: #fff;  
+}
+
+.propiet-nav .navbar-nav > li > a:hover,
+.propiet-nav .navbar-nav > li > a:focus {
+  padding-top: 15px;
+  padding-bottom: 17px;
+  color: #fff;
+  background-color: #a5423b;
+}
+
+.propiet-nav .navbar-nav > .active > a,
+.propiet-nav .navbar-nav > .active > a:hover {
+  padding-top: 15px;
+  padding-bottom: 17px;
+  color: #fff;
+  background-color: #a5423b;
+}
+
+.propiet-nav .nav .open > a, .nav .open > a:hover,
+.propiet-nav .nav .open > a:focus {
+  background-color: #a5423b;
+  color: #fff;
+}
+
+.propiet-nav .navbar-toggle {
+  border-color: #b84d45;
+}
+
+.propiet-nav .navbar-toggle:hover {
+  background-color: #b84d45;
+  border-color: #b84d45;
+}
+
+.propiet-nav .navbar-collapse {
+  border: none;
+}
+
+.propiet-nav .navbar-toggle .icon-bar {
+  background-color: #fff;
+}
+
+.propiet-nav .nav .caret {
+  border-top-color: #fbdedb;
+  border-bottom-color: #fbdedb;
+}
+
+.propiet-nav .nav .open > a, .nav .open > a:hover .caret,
+.propiet-nav .nav .open > a:focus .caret,
+.propiet-nav .nav .active .caret,
+.propiet-nav .nav a:hover .caret,
+.propiet-nav .nav a:focus .caret {
+  border-top-color: #fff;
+  border-bottom-color: #fff;
+}
+
+.propiet-nav .dropdown-menu > li > a:hover,
+.propiet-nav .dropdown-menu > li > a:focus,
+.propiet-nav .dropdown-menu > .active > a,
+.propiet-nav .dropdown-menu > .active > a:hover,
+.propiet-nav .dropdown-menu > .active > a:focus {
+  background-color: #a5423b;
+  color: #fff;
+}
+
+/* Homepage elements */
+.masthead {
+  background-color: #b84d45;
+  color: #fff;
+  position: relative;
+  padding: 6em 0;
+  text-align: center;
+}
+.masthead h1 {
+  font-size: 5em;
+  line-height: 1;
+}
+
+/* CUSTOMIZE THE CAROUSEL
+-------------------------------------------------- */
+
+/* Carousel base class */
+.carousel {
+  height: 500px;
+  margin-bottom: 60px;
+}
+/* Since positioning the image, we need to help out the caption */
+.carousel-caption {
+  z-index: 10;
+}
+
+/* Declare heights because of positioning of img element */
+.carousel .item {
+  height: 500px;
+  background-color: #777;
+}
+.carousel-inner > .item > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  height: 500px;
+}
+
+
+
+/* MARKETING CONTENT
+-------------------------------------------------- */
+
+/* Pad the edges of the mobile views a bit */
+.marketing {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Center align the text within the three columns below the carousel */
+.marketing .col-lg-4 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.marketing h2 {
+  font-weight: normal;
+}
+.marketing .col-lg-4 p {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+
+/* Featurettes
+------------------------- */
+
+.featurette-divider {
+  margin: 80px 0; /* Space out the Bootstrap <hr> more */
+}
+
+/* Thin out the marketing headings */
+.featurette-heading {
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+
+
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+
+@media (min-width: 768px) {
+
+  /* Remove the edge padding needed for mobile */
+  .marketing {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Bump up size of carousel content */
+  .carousel-caption p {
+    margin-bottom: 20px;
+    font-size: 21px;
+    line-height: 1.4;
+  }
+
+  .featurette-heading {
+    font-size: 50px;
+  }
+
+}
+
+@media (min-width: 992px) {
+  .featurette-heading {
+    margin-top: 120px;
+  }
+}
+
+/* LIST GRID CSS
+-------------------------------------------------- */
+.glyphicon { margin-right:5px; }
+.thumbnail
+{
+    margin-bottom: 20px;
+    padding: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+}
+
+.item.list-group-item
+{
+    float: none;
+    width: 100%;
+    background-color: #fff;
+    margin-bottom: 10px;
+    position: relative;    
+    padding: 0px 0px;        
+    border: 0px solid #dddddd;
+}
+
+.item.list-group-item .list-group-image
+{
+    margin-right: 10px;
+}
+.item.list-group-item .thumbnail
+{
+    margin-bottom: 0px;
+}
+
+.item.list-group-item:before, .item.list-group-item:after
+{
+    display: table;
+    content: " ";
+}
+
+.item.list-group-item img
+{
+    float: left;
+}
+.item.list-group-item:after
+{
+    clear: both;
+}
+.list-group-item-text
+{
+    margin: 0 0 11px;
+}
+
+/* FILTER CUSTOM PANEL */
+.filter {
+  padding: 5px 10px;
+  border-bottom: 0px solid transparent;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+.small-alert.alert {  
+  padding: 3px 26px 0px 5px;
+  margin-bottom: 4px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+}
+
+/* LISTS */
+.list-group-item:hover, a.list-group-item:focus {text-decoration: none;background-color: rgb(245, 245, 245);}
+.list-group { margin-bottom:0px; }
+
+/* Sticky footer styles
+-------------------------------------------------- */
+
+html,
+body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto -60px;
+  /* Pad bottom by footer height */
+  padding: 0 0 60px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+  height: 60px;
+  background-color: #f5f5f5;
+}
+
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+#wrap > .container {
+  padding: 25px 15px 0;
+}
+.container .credit {
+  margin: 20px 0;
+}
+
+#footer > .container {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+code {
+  font-size: 80%;
+}
+
+/* Search Box Index */
+.widget-index {
+  margin-bottom: 2em;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+}
+.padding-lg {
+  padding: 2em;
+}
+.bg-dark {
+  background: rgba(51,51,51,0.8);
+  color: #fff;
+}
+.uploadify {
+  position: relative;
+  margin-bottom: 1em;
+}
+.uploadify-button {
+  background-color: #505050;
+  background-image: linear-gradient(bottom, #505050 0%, #707070 100%);
+  background-image: -o-linear-gradient(bottom, #505050 0%, #707070 100%);
+  background-image: -moz-linear-gradient(bottom, #505050 0%, #707070 100%);
+  background-image: -webkit-linear-gradient(bottom, #505050 0%, #707070 100%);
+  background-image: -ms-linear-gradient(bottom, #505050 0%, #707070 100%);
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, #505050),
+    color-stop(1, #707070)
+  );
+  background-position: center top;
+  background-repeat: no-repeat;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  border: 2px solid #808080;
+  color: #FFF;
+  font: bold 12px Arial, Helvetica, sans-serif;
+  text-align: center;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+  width: 100%;
+}
+.uploadify:hover .uploadify-button {
+  background-color: #606060;
+  background-image: linear-gradient(top, #606060 0%, #808080 100%);
+  background-image: -o-linear-gradient(top, #606060 0%, #808080 100%);
+  background-image: -moz-linear-gradient(top, #606060 0%, #808080 100%);
+  background-image: -webkit-linear-gradient(top, #606060 0%, #808080 100%);
+  background-image: -ms-linear-gradient(top, #606060 0%, #808080 100%);
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, #606060),
+    color-stop(1, #808080)
+  );
+  background-position: center bottom;
+}
+.uploadify-button.disabled {
+  background-color: #D0D0D0;
+  color: #808080;
+}
+.uploadify-queue {
+  margin-bottom: 1em;
+}
+.uploadify-queue-item {
+  background-color: #F5F5F5;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  font: 11px Verdana, Geneva, sans-serif;
+  margin-top: 5px;
+  max-width: 350px;
+  padding: 10px;
+}
+.uploadify-error {
+  background-color: #FDE5DD !important;
+}
+.uploadify-queue-item .cancel a {
+  background: url('../img/uploadify-cancel.png') 0 0 no-repeat;
+  float: right;
+  height: 16px;
+  text-indent: -9999px;
+  width: 16px;
+}
+.uploadify-queue-item.completed {
+  background-color: #E5E5E5;
+}
+.uploadify-progress {
+  background-color: #E5E5E5;
+  margin-top: 10px;
+  width: 100%;
+}
+.uploadify-progress-bar {
+  background-color: #0099FF;
+  height: 3px;
+  width: 1px;
+}

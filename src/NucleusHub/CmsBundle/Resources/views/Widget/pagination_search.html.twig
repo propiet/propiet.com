@@ -1,0 +1,23 @@
+{% if pagination.total_pages %}
+<ul class="pagination">
+	{% if (pagination.total_pages == 0) %}
+		<li class="disabled"><a href="javascript:void(0);">«</a></li>
+		<li class="active"><a href="javascript:void(0);">1 <span class="sr-only">(current)</span></a></li>
+		<li class="disabled"><a href="javascript:void(0);">»</a></li>
+	{% else %}
+	    {% if (pagination.actual_page == 1) %}
+    		<li class="disabled"><a href="javascript:void(0);">«</a></li>
+	    {% else %}
+	    	<li><a href="?page={{pagination.actual_page - 1}}">«</a></li>
+	    {% endif %}
+	    {% for key,value in pagination.page_range %}	    
+	    	<li {% if (value.page == pagination.actual_page) %}class="active"{% endif %}><a href="?page={{value.page}}">{{value.page}}</a></li>	        	    
+	    {% endfor %}
+	    {% if pagination.actual_page == pagination.page_range|length %}
+	    	<li class="disabled"><a href="javascript:void(0);">»</a></li>
+	    {% else %}
+	    	<li><a href="?page={{pagination.actual_page + 1}}">»</a></li>
+	    {% endif %}
+    {% endif %}
+</ul>
+{% endif %}

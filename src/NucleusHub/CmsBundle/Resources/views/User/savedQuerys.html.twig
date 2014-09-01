@@ -1,0 +1,93 @@
+{% extends "NucleusHubCmsBundle::layout.html.twig" %}
+{% block title %}
+  <title>Propiet &middot; B&uacute;squedas</title>
+{% endblock %}
+{% block meta %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+{% block breadcum %}    
+        {% include 'NucleusHubCmsBundle:Widget:breadcrumb.html.twig' with {'routes': routes} %}    
+{% endblock %}
+{% block content %}
+    <div class="row mb2">
+      <div class="col-md-12">
+            <h1>B&Uacute;SQUEDAS</h1>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 col-md-2">             
+           <ul class="nav nav-pills nav-stacked">              
+              <li class="active"><a href="{{url('admin_saved_query_list')}}"><span class="glyphicon glyphicon-save"></span> Guardadas</a></li>              
+           </ul>
+        </div>
+        <div class="col-sm-9 col-md-10">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-list"></span> Listado
+                    <span class="pull-right label label-info">{% if (hasElements) %}{{pagination.count}} {% else %}0{% endif %}</span>
+                </div>
+                <div class="panel-body">
+                  
+                  <div id="successSavedQuery" class="alert alert-success" style="display:none;">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>¡Eliminado exitosamente!</strong> Se ha eliminado la b&uacute;squeda.
+                  </div>
+                  
+                  <div id="errorSavedQuery" class="alert alert-danger" style="display:none;">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>¡Ha ocurrido un error!</strong> Intente nuevamente m&aacute;s tarde.
+                  </div>
+                  {% if hasElements %}
+                    <ul class="list-group">
+                      {% for savedQuery in savedQuerys %}
+                        <li id="post-{{savedQuery.id}}" class="list-group-item">
+                            <div class="row">
+                              <div class="col-md-8">                           
+                                <h4><span class="glyphicon glyphicon-search"></span> <a href="{{url('homepage')}}{{savedQuery.query}}">
+                                {{savedQuery.name|length > 64 ? savedQuery.name|slice(0, 64) ~ '...' : savedQuery.name}}
+                                </a></h4>
+                                <p class="small">  
+                                    <i class="glyphicon glyphicon-calendar"></i> {{savedQuery.creation_date|date("d/m/Y h:i")}}
+                                </p>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="btn-toolbar pull-right" role="toolbar">                                  
+                                    {% if (user.id == savedQuery.user_id) %}
+                                      <div class="btn-group">
+                                          <a href="{{url('homepage')}}{{savedQuery.query}}" target="_blank" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-share-alt"></span> Ir</a>
+                                          <a href="{{url('admin_saved_query_edit',{'id':savedQuery.id})}}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> Editar</a>
+                                          <a href="#" class="btn btn-default btn-sm button-remove" data-id="{{savedQuery.id}}" data-user="{{savedQuery.user_id}}"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+                                      </div>                               
+                                    {% endif %}                                   
+                                </div>
+                              </div>
+                            </div>
+                        </li>
+                      {% endfor %}                      
+                    </ul>
+                    {% else %}
+                    <div class="alert alert-danger">
+                      Todav&iacute;a no tienes <strong>b&uacute;squedas</strong> guardadas. Usted puede guardar b&uacute;squedas desde nuestro <strong>"buscador de propiedades"</strong>.
+                    </div>                       
+                    {% endif %}
+                </div>
+                <div class="row">
+                  <div class="col-md-6 col-md-offset-5"> 
+                    {% if (hasElements) %}                  
+                      {% include 'NucleusHubCmsBundle:Widget:pagination.html.twig' with {'pagination': pagination} %}
+                    {% endif %}
+                  </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+  <script src="{{ asset('bundles/nucleushubcms/js/propiet/saved-querys.js') }}"></script>
+  <script type="application/javascript">
+    $( document ).ready(function() {        
+        savedQuerys.init();
+    });
+  </script>
+{% endblock %}

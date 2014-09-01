@@ -1,0 +1,25 @@
+{% extends "NucleusHubCmsBundle::layout.html.twig" %}
+{% block title %}
+  <title>Propiet &middot; Confirmar</title>
+{% endblock %}
+{% block meta %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+    {#
+        If you want to control the URL the user
+        is redirected to on success (more details below)
+        <input type="hidden" name="_target_path" value="/account" />
+    #}
+{% block breadcum %}
+    <div class="row">
+        {% include 'NucleusHubCmsBundle:Widget:breadcrumb.html.twig' with {'routes': routes} %}
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="container">
+    {{message}}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends "NucleusHubCmsBundle::layout.html.twig" %}
+{% block css %}  
+<link href="{{ asset('/css/agentProfile.css') }}" rel="stylesheet" media="screen">  
+{% endblock %}
+{% block title %}
+    <title>Propiet &middot; Agente</title>
+{% endblock %}
+{% block meta %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+
+{% block breadcum %}
+    <div class="row">
+        {% include 'NucleusHubCmsBundle:Widget:breadcrumb.html.twig' with {'routes': routes} %}
+    </div>
+{% endblock %}
+
+{% block content %}
+	<div class="row  col-md-offset-2">
+	<div class="col-sm-8 col-md-9 user-details">
+            <div class="user-image">
+                <img class="img-circle" width="100px" height="100px" src="{{asset('bundles/nucleushubcms/images/user-default.png') }}"/>
+            </div>
+            <div class="user-info-block">
+                <div class="user-heading">
+                    <h3>{{data.agent.firstname | capitalize}} {{data.agent.lastname | capitalize}}</h3>
+                </div>
+                <ul class="navigation">
+                    <li class="active">
+                        <a data-toggle="tab" href="#information">
+                            <span class="glyphicon glyphicon-user"></span>
+                            <small>Inf. Agente</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#email">
+                            <span class="glyphicon glyphicon-envelope"></span>
+                            <small>Enviar Mensaje</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#events">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                            <small>Coordinar Visita</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#rate">
+                            <span class=" glyphicon glyphicon-star-empty"></span>
+                            <small>Calificar</small>
+                        </a>
+                    </li>
+                </ul>
+                <div class="user-body">
+                    <div class="tab-content">
+                        <div id="information" class="tab-pane active">
+                            {% if user %}
+                                  <label>Email:</label><span class="label label-default">{{data.agent.email}}</span>
+                                  <br>
+                                  <label>N&uacute;mero: de Tel&eacute;fono:</label><span class="label label-default">{{data.agent.phone}}</span>
+                            {% else %}
+                                <h4>Solicite Informacio&acute;n del Agente</h4>
+                                 <a class="btn btn-danger">contactar</a>
+                            {% endif %}
+                           
+                        </div>
+                        <div id="email" class="tab-pane">
+                            <h4>Enviar Mensaje</h4>
+                             <div class="row ">
+                               <div class="col-sm-12 col-md-12" >
+                                      <form  role="form">
+                                      <div class="form-group">
+                                          <small>Ingrese Nombre</small>
+                                          <input type="text" class="form-control" id="name" placeholder="Nombre">
+                                      </div>
+                                      <div class="form-group">
+                                          <small>Email</small>
+                                          <input type="email" class="form-control" id="email" placeholder="ejemplo@ejemplo.com">
+                                      </div>
+                                     <div class="form-group">
+                                          <textarea class="form-control" rows="3" placeholder="Escriba su mensaje"></textarea>
+                                      </div>
+                                      <div class="form-group">
+                                          <button  class="btn btn-default">Enviar</button>
+                                      </div>
+                                    </form>
+                                </div>
+                         </div>
+                        </div>
+                        <div id="events" class="tab-pane">
+                             {% if user %}
+                                 <h4>Agedar Visita</h4>
+                                 <a class="btn btn-danger">contactar</a>
+                            {% else %}
+                               
+                            {% endif %}
+                        </div>
+                        <div id="rate" class="tab-pane">
+                            <h4>Calificar Agente</h4>
+                             {% if user %}
+                                 <a class="btn btn-danger">calificar</a>
+                            {% else %}
+                            
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+{% endblock %}
+
+{% block js %}
+{% endblock %}

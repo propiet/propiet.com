@@ -1,0 +1,86 @@
+<div class="row setup-content" id="step-2">
+<div class="container">
+  <div class="col-xs-12 well">
+    <form id="form-step-2" class="form-horizontal" role="form" novalidate="novalidate">
+      <div class="panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-home"></span> Caracteristicas</h3>
+          </div>
+          <div class="panel-body">
+            <div class="col-md-4">                              
+              <div class="form-group">
+                <label for="categories" class="col-sm-4 control-label">Tipo de Inmueble</label>
+                <div class="col-sm-8">
+                  <select id="categories" name="category" disabled required class="form-control">
+                    <option>--Seleccione--</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4"> 
+              <div class="form-group">
+                <label for="subcategories" class="col-sm-4 control-label">Tipo de Propiedad</label>
+                <div class="col-sm-8">
+                  <select id="subcategories" name="subcategory" disabled required class="form-control">
+                    <option>--Seleccione--</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4"> 
+              <div class="form-group">
+                <label for="operations" class="col-sm-4 control-label">Tipo de Operaci&oacute;n</label>
+                <div class="col-sm-8">
+                  <select id="operations" name="operation" disabled required class="form-control">
+                    <option {% if (post.post_data.operation.id == 1) %} selected {% endif %}value="1">Venta</option>
+                    <option {% if (post.post_data.operation.id == 2) %} selected {% endif %}value="2">Alquiler</option>
+                    <option {% if (post.post_data.operation.id == 3) %} selected {% endif %}value="3">Emprendimiento</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+          <div class="form-group">
+                  <label for="currency" class="col-sm-4 control-label">Tipo de Cambio</label>
+                  <div class="col-sm-8">                    
+                    <select id="currency" name="currency" class="form-control" required data-parsley-required-message="Este campo es requerido">
+                      <option {% if (post.post_data.currency.id == 1) %} selected {% endif %}value="1" selected> Pesos (ARS$)</option>
+                      <option {% if (post.post_data.currency.id == 2) %} selected {% endif %}value="2"> D&oacute;lares (US$)</option>
+                    </select>                 
+                  </div>
+              </div>
+            </div>
+        <div class="col-md-4">
+          <div class="form-group">
+                  <label for="price" class="col-sm-4 control-label">Precio ($)</label>
+                  <div class="col-sm-8">
+                    <input name="price" type="text" value="{{post.post_data.price}}" required class="form-control" data-parsley-required-message="Este campo es requerido" data-parsley-type="number" data-parsley-type-message="Debe ingresar n&uacute;meros"  placeholder="Ingrese el precio">
+                  </div>
+              </div>
+            </div>
+
+          </div>
+      </div>            
+      
+      <div class="panel panel-default">
+        <div id="step2-container" class="panel-body">
+          {% for item in postForm %}
+  
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label">{{item.label}}</label>
+                        <div class="col-sm-8">
+                          {{item.field| raw}}
+                        </div>
+                    </div>
+                  </div>              
+          {% endfor %}
+        </div>
+      </div>
+      <div class="col-md-6 col-md-offset-3">
+          <button id="activate-step-3" type="submit" class="btn btn-info btn-lg btn-block">Siguiente <span class="glyphicon glyphicon-circle-arrow-right"></span></button>
+      </div>
+    </form>
+  </div>
+</div>
+</div>

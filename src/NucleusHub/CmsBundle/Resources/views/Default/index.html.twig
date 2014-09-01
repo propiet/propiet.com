@@ -1,0 +1,191 @@
+{% extends "NucleusHubCmsBundle::layout.html.twig" %}
+{% block css %}  
+<link href="{{ asset('/css/modalCities.css') }}" rel="stylesheet" media="screen">
+{% endblock %}
+{% block title %}
+  <title>Propiet &middot; Inicio</title>
+{% endblock %}
+{% block meta %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+{% block carousel %}
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-caption">
+          <div class="widget padding-lg bg-dark">
+           <img src="{{asset('bundles/nucleushubcms/images/logo.jpg') }}" alt="Propiet">
+            <h1 class="heading-lg text-center text-light">T&uacute; Inmobiliaria Online</h1>
+                  <form id="searchForm" class="form-horizontal" role="form" data-baseurl="{{ url('homepage') }}" action="" method="post">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <select id="propertySelect"   class="form-control">
+                            <option>Tipo de Propiedad</option>
+                            {% for key,value in searchList["category"] %}
+                                <option id="{{value.id}}" data-slug="{{value.name|lower|replace({' ':'-',',':'','.':''})}}">{{value.name|upper}}</option>
+                            {% endfor %}
+                          </select>
+                      </div>
+                      <div class="col-md-4">
+                        <select id="operationSelect"   class="form-control">
+                            <option>Operaci&oacute;n</option>
+                             <!--  <option id="key" data-slug="value|lower">value</option> -->
+                            {% for key,value in searchList["operation"] %}
+                                <option id="{{value.id}}" data-slug="{{value.operation|lower}}">{{value.operation|upper}}</option>
+                            {% endfor %}
+                        </select>
+                      </div>
+                      <div class="col-md-2">
+                        <select id="regionSelect"  class="form-control" disabled="disabled">
+                            {% for key,value in searchList["region"]%}
+                                   {% if value.id == 1 %}
+                                      <option selected id="{{value.id}}" data-slug="{{value.name|lower|replace({' ':'-',',':'','.':''})}}">{{value.name}}</option>
+                                   {% else %}
+                                      <option id="{{value.id}}" data-slug="{{value.name|lower|replace({' ':'-',',':'','.':''})}}">{{value.name}}</option>
+                                   {% endif %}
+                            {% endfor %}                
+                        </select>
+                      </div>
+                      <div  class="col-md-2">
+                          <input id="citySelect"   data-ids="" data-cities="" type="text" class="form-control" placeholder="Barrio" value=""/>
+                      </div>
+                    </div>
+                    <div class="row mt3">
+                       <div class="col-md-4">
+                        <input id="priceMin"   type="text" class="form-control" placeholder="$ Precio Desde" maxlength=8 value=""/>
+                      </div>
+                      <div class="col-md-4">
+                        <input id="priceMax"  type="text" class="form-control" placeholder="$ Precio Hasta" maxlength=8 value=""/>
+                      </div>
+                      <div id="currencyType" class="col-md-4">
+                        <label class="radio-inline">
+                          <input  type="radio" name="currency_type" id="currency_pesos" value="1"  >ARS$
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" name="currency_type" id="currency_dolars" value="2"  >US$
+                        </label>
+                      </div>        
+                    </div>
+                    <!--
+                    <input id="operation" name="operation" type="hidden">
+                    <input id="category" name="category" type="hidden">
+                    <input id="region"  name="region" type="hidden">
+                    <input id="city" name="city" type="hidden">
+                    <input id="price_min" name="price_min" type="hidden">
+                    <input id="price_max" name="price_max" type="hidden">
+                    <input id="currency" name="currency" type="hidden">
+                    -->
+                  </form> 
+                   <div class="row">
+                     <div class="col-md-6 col-md-offset-3 mt2">
+                       <button id="searchBtn" type="button" class="btn btn-danger btn-lg btn-block"><h4><span class="glyphicon glyphicon-search"></span> Buscar</h4></button>
+                    </div>
+                  </div>
+                </div>
+           
+      </div>
+      <div class="carousel-inner">
+        <div class="item active">
+          <img src="{{asset('bundles/nucleushubcms/images/indexCarousel1.jpg') }}" alt="First slide">
+          <div class="container">
+          </div>
+        </div>
+        <div class="item">
+          <img src="{{asset('bundles/nucleushubcms/images/indexCarousel2.jpg') }}" alt="Second slide">
+          <div class="container">            
+          </div>
+        </div>
+        <div class="item">
+          <img src="{{asset('bundles/nucleushubcms/images/indexCarousel3.jpg') }}" alt="Third slide">
+          <div class="container">            
+          </div>
+        </div>
+      </div>
+      <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div><!-- /.carousel -->
+
+    <div class="row">
+      <div class="container">
+        <h1 class="text-center">Una mejor manera de vender y encontrar su hogar</h1>
+      </div>
+    </div>
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+    <div class="container marketing">
+      <!-- Three columns of text below the carousel -->
+      <div class="row">
+        <div class="col-lg-4">
+          <img class="img-circle" src="{{ asset('../img/bubble_home.png') }}" width="140px" height="140px" alt="Generic placeholder image">
+          <h2>Estamos de su lado</h2>
+          <p>Los Agentes asociados Propiet son seleccionados, capacitados y
+          evaluados constantemente. Trabajamos duro para obtener el resultado adecuado para usted y no el trato f&aacute;cil</p>
+          
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <img class="img-circle" src="{{ asset('../img/house_home.png') }}" width="140px" height="140px" alt="Generic placeholder image">
+          <h2>Ventajas Tecnol&oacute;gicas</h2>
+          <p>Sea el primero en encontrar nuevas propiedades y
+          obtenga la m&aacute;xima exposici&oacute;n al vender su casa.</p>          
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <img class="img-circle" src="{{ asset('../img/money_home.png') }}" width="140px" height="140px" alt="Generic placeholder image">
+          <h2>Valor Sin compromiso</h2>
+          <p>Gran tecnolog&iacute;a y un modelo de negocios innovador significa que podemos darle un mejor servicio a un menor costo.</p>          
+        </div><!-- /.col-lg-4 -->
+      </div>
+      <div class="row">
+        <div class="container">
+          <div class="col-md-12">
+          <div class="col-md-4 col-md-offset-3">
+            <a class="btn btn-default" href="{{url('sell_rent_search_info') }}" role="button">Ver m&aacute;s sobre la Compra &raquo;</a>
+          </div>
+          <div class="col-md-4">
+          <a class="btn btn-default" href="{{url('sell_rent_info') }}" role="button">Ver m&aacute;s sobre la Venta &raquo;</a>
+          </div>
+        </div>
+        </div>
+      </div><!-- /.row -->
+    </div><!--/.container-->
+{% endblock %}
+{% block content %}
+     <div class="container">
+	<div class="row">
+            <div id="cityModal" class="modal hideBar fade in" tabindex="-1" role="dialog" aria-labelledby="cityModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <a class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></a>
+                            <h4 class="modal-title" id="cityModalLabel">Barrio</h4>
+                        </div>
+                        <div class="modal-body wrapContent">
+                             {% for city in searchList["city"] %}
+                                <div class="checkbox-inline">
+                                  <label>
+                                    <input id="{{city.id}}" data-name="{{city.name}}" type="checkbox"> {{city.name}}
+                                  </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                            <button id="cityModalSeleccionarBtn" class="btn btn-primary">Seleccionar</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dalog -->
+            </div><!-- /.modal -->    
+        </div>
+     </div>
+{% endblock %}
+
+{% block js %}
+<script src="{{ asset('bundles/nucleushubcms/js/propiet/index.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,39 @@
+<div class="row setup-content" id="step-4">
+<div class="container">
+  <div class="col-xs-12 well">
+  
+  	<form>
+  		<div class="panel panel-info">
+		  <div class="panel-heading">
+		    <h3 class="panel-title"><span class="glyphicon glyphicon-picture">Carga de Imágenes</h3>
+		  </div>
+		  <div  class="panel-body">
+		    <div class="well">Maxímo de Imágenes: <span class="label label-warning">15</span> | Peso Máximo: <span class="label label-warning">5 MB</span> | Formatos: <span class="label label-warning">JPG</span> <span class="label label-warning">JPEG</span> <span class="label label-warning">PNG</span></div>
+		  	<div id="queue"></div>
+			<input id="file_upload" name="file_upload" type="file" multiple="true">
+		  </div>
+		</div>
+        <div class="panel panel-success hidden" id="image-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="glyphicon glyphicon-picture"> Imágenes Actuales</h3>
+            </div>
+            <div  class="panel-body">
+                <div class="row" id="images-row">
+                </div>
+            </div>
+        </div>
+		
+		<div id="endButton" class="row">
+            <div class="col-md-6">
+                <a href="#" id="view-post" class="btn btn-warning btn-lg btn-block" target="_blank">Visualizar <span class="glyphicon glyphicon-eye-open"></span></a>
+            </div>
+		    <div class="col-md-6">
+		    	<a href="/admin/publicaciones" class="btn btn-success btn-lg btn-block" role="button">
+		    		<span class="glyphicon glyphicon-share-alt"></span> Ir a Publicaciones
+		    	</a>			
+		    </div>
+		</div>
+	</form>
+  </div>
+</div>
+</div>

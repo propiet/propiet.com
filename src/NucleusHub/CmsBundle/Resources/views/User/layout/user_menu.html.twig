@@ -1,0 +1,48 @@
+<div class="btn-group">
+    <button data-toggle="dropdown" class="btn btn-lg btn-default dropdown-toggle">
+      
+      <span class="glyphicon glyphicon-align-justify"></span>
+      {{routes[1]['title'] ? routes[1]['title'] : "Menu"}} 
+    </button>
+    <ul class="dropdown-menu">
+
+      {% if user.roles[0] == 'ROLE_USER' or user.roles[0] == 'ROLE_COMPANY' %}              
+          <li {% if (routes[1]['title'] == 'Nuevas')%}class="active"{% endif %}><a href="{{url('admin_publications_list_new')}}"><span class="glyphicon glyphicon-asterisk"></span> Nuevas</a></li>
+   {% endif %}           
+   {% if user.roles[0] == 'ROLE_AGENT' %}
+          <li {% if (routes[1]['title'] == 'Red Interna')%}class="active"{% endif %}>
+            <a href="{{url('admin_publications_list_red_interna')}}"><span class="glyphicon glyphicon-eye-open"></span> Red Interna</a>
+          </li>
+
+          <li {% if (routes[1]['title'] == 'De Terceros')%}class="active"{% endif %}>
+            <a href="{{url('admin_publications_list_de_terceros')}}"><span class="glyphicon glyphicon-globe"></span> De Terceros</a>
+          </li>
+
+          <li {% if (routes[1]['title'] == 'Asignadas')%}class="active"{% endif %}>
+            <a href="{{url('admin_publications_list_assigned')}}"><span class="glyphicon glyphicon-pushpin"></span> Asignadas</a>
+          </li>
+
+          <li {% if (routes[1]['title'] == 'Nuevas')%}class="active"{% endif %}>
+            <a href="{{url('admin_publications_list_new')}}"><span class="glyphicon glyphicon-asterisk"></span> Nuevas</a>
+          </li>                   
+   {% endif %}
+
+          <li {% if (routes[1]['title'] == 'Publicadas')%}class="active"{% endif %}>
+            <a href="{{url('admin_publications_list_published')}}"><span class="glyphicon glyphicon-ok"></span> Publicadas</a>
+          </li>
+          <!--
+          <li {% if (routes[1]['title'] == 'Pausadas')%}class="active"{% endif %}>
+            <a href="{{url('admin_publications_list_paused')}}"><span class="glyphicon glyphicon-pause"></span> Pausadas</a>
+          </li> 
+
+          <li {% if (routes[1]['title'] == 'Finalizadas')%}class="active"{% endif %}>
+            <a href="{{url('admin_publications_list_sold')}}"><span class="glyphicon glyphicon-stop"></span> Finalizadas</a>
+          </li>
+          
+          <li {% if (routes[1]['title'] == 'Archivadas')%}class="active"{% endif %}>
+            <a href="{{url('admin_publications_list_inactive')}}"><span class="glyphicon glyphicon-folder-close"></span> Archivadas</a>
+          </li>
+        -->
+        
+    </ul>
+</div>          

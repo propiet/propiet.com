@@ -1,0 +1,104 @@
+{% extends "NucleusHubCmsBundle::layout.html.twig" %}
+{% block css %}  
+
+{% endblock %}
+{% block title %}
+    <title>Propiet &middot; Tasaciones</title>
+{% endblock %}
+{% block meta %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+
+{% block breadcum %}
+    <div class="row">
+        {% include 'NucleusHubCmsBundle:Widget:breadcrumb.html.twig' with {'routes': routes} %}
+    </div>
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+{% if form_errors(form) %}
+    <div class="alert alert-danger alert-dismissable">
+        <strong>Oops!</strong> Ocurrio un error inesperado, intente nuevamente más tarde.
+    </div>
+    {% endif %}
+    {% if sent == 1 %}
+    <div class="alert alert-success alert-dismissable">
+        <strong>Exito!</strong> Ya se envió su consulta, responderemos a la brevedad.
+    </div>
+    {% endif %}
+<div class="col-md-8 col-md-offset-2 well well-sm">
+<legend><img src="{{asset('bundles/nucleushubcms/images/logo.jpg') }}" alt=""/> Pedido de Tasación</legend>
+<form id="form-sell" class="form-horizontal" action="{{ path('price_your_home') }}" {{ form_enctype(form) }} method="POST" role="form">
+{{ form_widget(form._token) }}
+<fieldset>
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">Nombre</label>  
+  <div class="col-md-5">
+    {{ form_widget(form.first_name, {'attr':{'class':'form-control','title':'Ingrese su nombre.','placeholder':'Ingrese su nombre', 'data-parsley-required-message':'Este campo es requerido'}}) }}
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">Apellido</label>  
+  <div class="col-md-5">
+    {{ form_widget(form.last_name, {'attr':{'class':'form-control','title':'Ingrese su apellido.','placeholder':'Ingrese su apellido', 'data-parsley-required-message':'Este campo es requerido'}}) }}
+  </div>
+</div>
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">Email</label>  
+  <div class="col-md-5">
+    {{ form_widget(form.email, {'attr':{'class':'form-control','title':'Ingrese su email.','placeholder':'Ingrese su email', 'data-parsley-required-message':'Este campo es requerido'}}) }}    
+  </div>
+</div>
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">Teléfono</label>  
+  <div class="col-md-5">
+  {{ form_widget(form.phone, {'attr':{'class':'form-control','title':'Ingrese su teléfono.','placeholder':'Ingrese su teléfono', 'data-parsley-required-message':'Este campo es requerido'}}) }}
+  <span class="help-block">(011)-xxxxxxxx</span>  
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput">Dirección</label>  
+  <div class="col-md-5">
+  {{ form_widget(form.address, {'attr':{'class':'form-control','title':'Ingrese su dirección.','placeholder':'Ingrese su dirección', 'data-parsley-required-message':'Este campo es requerido'}}) }}    
+  </div>
+</div>
+
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textarea">Descripción General</label>
+  <div class="col-md-5">                     
+    {{ form_widget(form.message, {'attr':{'class':'form-control','title':'Ingrese una descripción.','placeholder':'Ingrese una descripción', 'data-parsley-required-message':'Este campo es requerido'}}) }}
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="singlebutton"></label>
+  <div class="col-md-4">
+    <button id="btn-submit" name="singlebutton" class="pull-center btn btn-primary btn-lg">Enviar</button>
+  </div>
+</div>
+</fieldset>
+</form>
+</div>
+</div>
+<script src="{{ asset('bundles/nucleushubcms/js/lib/parsley.min.js') }}"></script>
+<script type="application/javascript" src="{{ asset('bundles/nucleushubcms/js/propiet/sell.js') }}"></script>
+<script type="application/javascript">
+    $( document ).ready(function() {    
+        sell.init();
+    });
+</script>
+{% endblock %}
+
+{% block js %}
+{% endblock %}

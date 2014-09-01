@@ -1,0 +1,18 @@
+<div class="row">
+	<div class="container">
+		<ol class="breadcrumb">
+			<li><a href="{{url('homepage')}}" >Propiet</a></li>
+			{% for route in routes %}
+				{% if (route.isActive) %}
+					<li class="active">		
+						<span>{{route.title}}</span>
+					</li>
+				{% else %}
+					<li>		
+						<a href="{% if route.href %} {{route.href}} {% endif %}" onClick="return();">{{route.title}}</a>
+					</li>
+				{% endif %}
+			{% endfor %}
+		</ol>
+	</div>
+</div>

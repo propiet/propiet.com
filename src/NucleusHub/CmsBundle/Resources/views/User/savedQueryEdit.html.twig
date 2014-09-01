@@ -1,0 +1,89 @@
+{% extends "NucleusHubCmsBundle::layout.html.twig" %}
+{% block title %}
+  <title>Propiet &middot; B&uacute;squedas</title>
+{% endblock %}
+{% block meta %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+{% block breadcum %}
+    <div class="row">
+        {% include 'NucleusHubCmsBundle:Widget:breadcrumb.html.twig' with {'routes': routes} %}
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row mb2">
+      <div class="col-md-12">
+            <h1>B&Uacute;SQUEDAS</h1>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 col-md-2">             
+           <ul class="nav nav-pills nav-stacked">              
+              <li class="active"><a href="{{url('admin_saved_query_list')}}"><span class="glyphicon glyphicon-edit"></span> Editar</a></li>              
+           </ul>
+        </div>
+        <div class="col-sm-9 col-md-10">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-search"></span> B&uacute;squeda                    
+                </div>
+                <div class="panel-body">
+                  
+                  <div id="successSavedQuery" class="alert alert-success" style="display:none;">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>¡Guardado exitosamente!</strong>.
+                  </div>
+                  
+                  <div id="errorSavedQuery" class="alert alert-danger" style="display:none;">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>¡Ha ocurrido un error!</strong> Intente nuevamente m&aacute;s tarde.
+                  </div>
+                  {% if exists %}
+                    <form id="form-saved-query-edit" class="form-horizontal" role="form">
+                      <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">Nombre</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" name="name" id="name" required maxlength="200" value="{{savedQuery.name}}" data-parsley-required-message="Este campo es requerido" data-parsley-maxlength-message="M&aacute;ximo 200 caracteres">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label">B&uacute;squeda</label>
+                        <div class="col-sm-10">
+                          <p class="form-control-static">
+                          {{url('homepage')}}{{savedQuery.query}}
+                          </p>
+                        </div>
+                      </div>
+                      <input type="hidden" name="id" value="{{savedQuery.id}}">
+                      <input type="hidden" name="user" value="{{savedQuery.user}}">
+                      <input type="hidden" name="query" value="{{savedQuery.query}}">
+                      <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                          <a href="{{url('admin_saved_query_list')}}" class="btn btn-default btn-lg">Cancelar</a>
+                          <button id="form-saved-query-submit" type="button" class="btn btn-primary btn-lg">Guardar</button>
+                        </div>
+                        <div class="col-sm-2">
+                          <a href="{{url('admin_saved_query_list')}}" id="back" class="btn btn-default btn-lg">Volver</a>
+                        </div>
+                      </div>
+                    </form>                    
+                    {% else %}
+                    <div class="alert alert-danger">
+                      No se encontr&oacute; la <strong>b&uacute;squeda</strong>. <a href="{{url('admin_saved_query_list')}}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-share-alt"></span> Volver</a>
+                    </div>                       
+                    {% endif %}
+                </div>
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+  <script src="{{ asset('bundles/nucleushubcms/js/lib/parsley.min.js') }}"></script>
+  <script src="{{ asset('bundles/nucleushubcms/js/propiet/saved-querys.js') }}"></script>
+  <script type="application/javascript">
+    $( document ).ready(function() {        
+        savedQuerys.init();
+    });
+  </script>
+{% endblock %}
