@@ -1,0 +1,4 @@
+nucleus_hub_cms:
+    resource: "@NucleusHubCmsBundle/Controller/"
+    type:     annotation
+    prefix:   /

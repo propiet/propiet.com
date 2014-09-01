@@ -1,0 +1,24 @@
+services:    
+    user_service:
+        class:     NucleusHub\CmsBundle\Services\UserService
+        arguments: ["@api_caller"]
+
+    list_service:
+        class:     NucleusHub\CmsBundle\Services\ListService
+        arguments: ["@api_caller"]
+
+    post_service:
+        class:     NucleusHub\CmsBundle\Services\PostService
+        arguments: ['@api_caller','%apikey%','%api_urls%']
+
+    saved_query_service:
+        class:     NucleusHub\CmsBundle\Services\SavedQueryService
+        arguments: ['@api_caller','%apikey%','%api_urls%']
+
+    webservice_user_provider:
+        class: NucleusHub\CmsBundle\Security\User\WebserviceUserProvider
+        arguments: ["@user_service","@security.encoder_factory","@service_container"]
+
+    search_service:
+        class:     NucleusHub\CmsBundle\Services\SearchService
+        arguments: ['@api_caller','%apikey%','%api_urls%']

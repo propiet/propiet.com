@@ -1,0 +1,170 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+
+framework:
+    #esi:             ~
+    translator:      { fallback: %locale% }
+    secret:          %secret%
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: %kernel.debug%
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+        #assets_version: SomeVer sionScheme
+    default_locale:  "%locale%"
+    trusted_proxies: ~
+    session:         ~
+    fragments:       ~
+
+# Twig Configuration
+twig:
+    debug:            %kernel.debug%
+    cache: false
+    strict_variables: %kernel.debug%
+    cache: false
+
+# Assetic Configuration
+assetic:
+    debug:          %kernel.debug%
+    use_controller: false
+    bundles:        [ ]
+    filters:
+        less:
+            node:       %node%
+            node_paths: [%less%]
+            apply_to:   "\.less$"
+        cssrewrite: ~
+    assets:
+        bootstrap_css:
+            inputs:
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/less/bootstrap/bootstrap.less                
+            filters:
+                - less
+                - cssrewrite
+            output: css/bootstrap.css
+        offcanvas_css:
+            inputs:
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/less/bootstrap/offcanvas.less
+            filters:
+                - less
+                - cssrewrite
+            output: css/offcanvas.css
+        listsnipp_css:
+            inputs:
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/less/bootstrap/login.less
+            filters:
+                - less
+                - cssrewrite
+            output: css/login.css
+        registration_css:
+            inputs:
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/less/bootstrap/registration.less                
+            filters:
+                - less
+                - cssrewrite
+            output: css/registration.css
+        modal_css:
+            inputs:
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/less/bootstrap/modalCities.less                
+            filters:
+                - less
+                - cssrewrite
+            output: css/modalCities.css
+        accordionList_css:
+            inputs:
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/less/bootstrap/accordion-list-group-menu.less                
+            filters:
+                - less
+                - cssrewrite
+            output: css/accordionListGroupMenu.css
+        searchResults_css:
+            inputs:
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/less/bootstrap/search-results-normal.less                
+            filters:
+                - less
+                - cssrewrite
+            output: css/searchResultsNormal.css
+        agentProfile_css:
+            inputs:
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/less/bootstrap/agent-profile.less                
+            filters:
+                - less
+                - cssrewrite
+            output: css/agentProfile.css
+        image_caption_css:
+            inputs:
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/less/bootstrap/image-caption.less                
+            filters:
+                - less
+                - cssrewrite
+            output: css/image-caption.css
+        landing_css:
+            inputs:
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/less/bootstrap/landing.less                
+            filters:
+                - less
+                - cssrewrite
+            output: css/landing.css
+        bootstrap_js:
+            inputs:
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/js/transition.js
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/js/alert.js
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/js/button.js
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/js/carousel.js
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/js/collapse.js
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/js/dropdown.js
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/js/modal.js
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/js/tooltip.js
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/js/popover.js
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/js/scrollspy.js
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/js/tab.js
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/js/affix.js
+            output: js/bootstrap.js
+        jquery:
+            inputs:
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/js/jquery-1.10.2.min.js
+            output: js/jquery.js
+        list_js:
+            inputs:
+                - %kernel.root_dir%/../src/NucleusHub/CmsBundle/Resources/public/js/list.js
+            output: js/list.js
+braincrafted_bootstrap:
+        less_filter: less
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   %database_driver%
+        host:     %database_host%
+        port:     %database_port%
+        dbname:   %database_name%
+        user:     %database_user%
+        password: %database_password%
+        charset:  UTF8
+    orm:
+        auto_generate_proxy_classes: %kernel.debug%
+        auto_mapping: true
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: %mailer_transport%
+    host:      %mailer_host%
+    username:  %mailer_user%
+    password:  %mailer_password%
+    spool:     { type: memory }
+
+jms_di_extra:
+    locations:
+        all_bundles: false
+        directories: ["%kernel.root_dir%/../src"]
+
+    automatic_controller_injections:
+        properties:
+            request: "@request"
+            router: "@router"
+        method_calls:
+            setRouter: ["@router"]

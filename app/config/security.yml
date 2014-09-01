@@ -1,0 +1,61 @@
+jms_security_extra:
+    secure_all_services: false
+    expressions: true
+
+security:
+    acl:
+        connection: default
+
+    encoders:
+        NucleusHub\CmsBundle\Security\User\WebserviceUser:
+            algorithm: plaintext
+            encode_as_base64: false
+            iterations: 1
+
+    role_hierarchy:        
+        ROLE_AGENT:       [ROLE_USER]
+        ROLE_CLIENT:      [ROLE_USER]
+        ROLE_COMPANY:     [ROLE_USER]
+        ROLE_USER_SEARCH: [ROLE_USER]
+        ROLE_ADMIN:       [ROLE_USER]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        webservice:
+            id: webservice_user_provider
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        # defaut login area for standard users
+        main:
+            switch_user:        true
+            context:            user
+            pattern:            .*
+            form_login:
+                provider:       webservice
+                login_path:     /login
+                use_forward:    false
+                check_path:     /login_check
+                failure_path:   null
+                default_target_path: /admin/publicaciones
+            logout:             true
+            anonymous:          true
+
+    access_control:
+        # URL of FOSUserBundle which need to be available to anonymous users
+        - { path: ^/_wdt, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/_profiler, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
+        - { path: ^/registro, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
+        # Secured part of the site
+        # This config requires being logged for the whole site and having the admin role for the admin part.
+        # Change these rules to adapt them to your needs
+        - { path: ^/admin, role: [ROLE_USER, ROLE_AGENT, ROLE_COMPANY, ROLE_ADMIN] }
+        - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }

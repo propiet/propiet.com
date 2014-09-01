@@ -1,0 +1,67 @@
+parameters:
+    database_driver:   pdo_mysql
+    database_host:     127.0.0.1
+    database_port:     ~
+    database_name:     database_name
+    database_user:     database_user
+    database_password: database_password
+
+    mailer_transport:  smtp
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+    mailer_password:   ~
+    node:              /usr/local/bin/node  
+    less:              /usr/local/lib/node_modules
+    locale:            es
+    secret:            ThisTokenIsNotSoSecretChangeIt
+    api_caller.options:
+        timeout: 30  # maximum transport + execution duration of the call in sec.
+        ssl_verifypeer: false  # to stop cURL from verifying the peer's certificate.
+        useragent: "LeaseWeb API Caller"  # contents of the "User-Agent: " header.
+        followlocation: true  # to follow any "Location: " header that the server sends.
+        sslversion: 3  # set to 3 to avoid any bugs that relate to automatic version selection.
+        fresh_connect: false  # set to true to force full reconnect every call.
+    apikey: 323318c1292865b6888979636b25f5ba501779df
+    api_urls:
+        base: http://api.propiet.com/v1
+        users:
+            login: /user/auth
+            logout: /user/logout
+            add: /user/add
+            update: /user/update
+            changePassword: /user/chpwd
+        post:
+            list: /post/list
+            add: /post/add
+            update: /post/update
+            status: /post/status
+            search: /post/search
+            get: /post/get
+            agent: /post/agent
+            post: /post
+        query:
+            list: 
+            add_logged_out: /saved_query/add_logged_out
+            add_logged_in: /saved_query/add_logged_in
+            delete: /saved_query/delete
+        list:
+            categories: /list/categories
+            subcategories: /list/subcategories
+            post: /list/post
+            services: /list/services
+            ambiences: /list/ambiences
+            regions: /list/regions
+            cities: /list/cities
+            search: /list/search
+        city:
+            list: /city
+        region:
+            list: /region
+        category:
+            list: /category
+        currency:
+            list: /currency
+        operation:
+            list: /operation
+        search:
+            list: /search
