@@ -22,3 +22,7 @@ services:
     search_service:
         class:     NucleusHub\CmsBundle\Services\SearchService
         arguments: ['@api_caller','%apikey%','%api_urls%']
+
+    integration_service:
+        class:     NucleusHub\CmsBundle\Services\IntegrationService
+        arguments: ['@api_caller','%apikey%','%api_urls%']

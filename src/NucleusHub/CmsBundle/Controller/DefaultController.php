@@ -13,7 +13,7 @@ use NucleusHub\CmsBundle\Form\Type\SellAgentType;
 class DefaultController extends Controller
 {    
     /**
-     * @Route("/", name="homepage")
+     * @Route("/index", name="homepage")
      * @Template("NucleusHubCmsBundle:Default:index.html.twig")
      */
     public function indexAction(Request $request)

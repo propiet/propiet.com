@@ -205,7 +205,12 @@ class ApiController extends Controller
     				 'post' => $post);
     		
     		$post_service = $this->get('post_service');
-        	$response = $post_service->addPost($form_data, $apiKey); 
+        	$response = $post_service->addPost($form_data, $apiKey);
+
+            if ($response != 'ERR_EMPTY_LIST') {
+                $integration_service = $this->get('integration_service');
+                $responseInteg = $integration_service->addPostProperati($response['id'], $apiKey);
+            }
     	}
             
         return new JsonResponse($response);    
