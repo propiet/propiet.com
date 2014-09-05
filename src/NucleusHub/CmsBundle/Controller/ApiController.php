@@ -312,7 +312,14 @@ class ApiController extends Controller
                      'post' => $post);
             
             $post_service = $this->get('post_service');
-            $response = $post_service->updatePost($form_data, $apiKey); 
+            $response = $post_service->updatePost($form_data, $apiKey);
+
+            if ($response != 'ERR_EMPTY_LIST') {
+                $integration_service = $this->get('integration_service');
+                $responseIntegEl = $integration_service->deletePostProperati($postId, $apiKey);
+                $responseInteg = $integration_service->addPostProperati($postId, $apiKey);
+                
+            } 
         }
             
         return new JsonResponse($response);    
@@ -598,6 +605,12 @@ class ApiController extends Controller
                 //    die(0);
                //}
             }
+            
+            //Add photos to properati files
+            $integration_service = $this->get('integration_service');
+            $responseIntegEl = $integration_service->deletePostProperati($post, $apiKey);            
+            $responseInteg = $integration_service->addPostProperati($post, $apiKey);
+
         }
         return new JsonResponse($response);
     }

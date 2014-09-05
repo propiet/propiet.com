@@ -269,7 +269,13 @@ var wizard = function () {
                       }
                   });
               } else {
-                  $('#errorWizard').show();
+                 if (result.data == 'ERR_FORM_INVALID') {
+                    $('#errorWizard').show().text(result.data.data);
+                 }
+                  if (result.data == 'ERR_UNAUTHORIZED') {
+                     $('#errorWizard').show().text(result.data.data);
+                  }
+                  
               }
           });
           $('ul.setup-panel li:eq(0)').addClass('disabled');
