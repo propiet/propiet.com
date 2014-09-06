@@ -359,7 +359,9 @@ class UserController extends Controller
      * @Template()
      */
     public function addUserPostAction()
-    {       
+    {   
+       
+        //var_dump($this->container->getServiceIds());
         $securityContext = $this->get('security.context');
         $token = $securityContext->getToken();
         $user = $token->getUser();
