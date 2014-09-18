@@ -286,5 +286,25 @@ class PostService
         }      
         return $response;
     }
+
+   public function getAgent($id){
+    
+        $url = "http://api.propiet.com/v1/agent/".$id;
+
+        $parameters = '';
+
+        $output = $this->api_caller->call(new HttpPost($url, $parameters));
+        
+        $data = json_decode($output, true);
+        
+        if($data['response']['success'] == true){
+
+           $response = $data['response']['data'];
+        } else {
+            $response = $data['response'];
+        }      
+        return $response;
+
+   }
     
 }

@@ -139,6 +139,35 @@ class SearchService
         return $filterSearch;
     }
     
+    public function getPropertysIds($params){
+
+        
+        
+
+        $url =  $this->apiUrls['base'].$this->apiUrls['property']['list'];
+
+        if($params['address'])
+            $parameters['location__address__contains'] = $params['address'];
+
+        $propertys = $this->api_caller->call(new \Lsw\ApiCallerBundle\Call\HttpGetJson ($url, $parameters,true));
+
+        if( $propertys['objects'] ){
+            if($propertys['meta']['total_count']){
+
+                $property_id = $propertys['objects'][0]['id'];
+
+                for($i = 1; $i < $propertys['meta']['total_count']; $i++){
+
+                    $property_id .= ','.$propertys['objects'][$i]['id'];
+                }
+            }
+        }else{
+            $property_id = 0;
+        } 
+
+        return $property_id;
+    }
+
     public function getPostListQuery($params,$page=null){
         //http://api.propiet.com/v1/post/
         //?limit=0
@@ -159,8 +188,18 @@ class SearchService
         
         $postList = NULL;
         $urlPost = $this->apiUrls['base'].$this->apiUrls['search']['list'];
-        $parameters = array('format'=>'json',"limit"=>20,"status"=>self::STATUS_PUBLISHED);
+        $parameters = array('format'=>'json',"limit"=>20);
         
+        if($params['address']){
+            $params_property = array('address' => $params['address']);
+            $parameters['property__id__in'] = $this->getPropertysIds($params_property);
+        }
+        if($params['userid']){
+            $parameters['user__id']=$params['userid'];
+        }
+        if($params['agentid']){
+            $parameters['agent__id']=$params['agentid'];
+        }
         if($params['category']){
             $parameters['category__name__in']=$params['category'];
         }
@@ -187,8 +226,14 @@ class SearchService
         if($params['currency']){
             $parameters['currency__id']=$params['currency'];
         }
+        if($params['status']){
+            $parameters['status'] = $params['status'];
+        }else{
+            $parameters['status'] = self::STATUS_PUBLISHED;
+        }
+        
         if($page){
-            $parameters['offset']=$page*20;
+            $parameters['offset']=($page-1)*20;
         }
         
         $post = $this->api_caller->call(new \Lsw\ApiCallerBundle\Call\HttpGetJson ($urlPost, $parameters,true));
@@ -202,8 +247,8 @@ class SearchService
 //         $output['page_number'] = int(self.offset / self.limit) + 1;
 
         if($post['meta']){
-            $pagActual = $page ? $page : 0;
-            $totalPages = 0;
+            $pagActual = $page ? $page : 1;
+            $totalPages = 1;
                
                if($post['meta']['total_count']){
                   $totalPages = (int) round(($post['meta']['total_count'] / $post['meta']['limit']));

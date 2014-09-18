@@ -48,61 +48,71 @@
             <div class="row">
                         
               <div class="col-md-1">
-                {% for image in post.data.images %}
-                  {% if loop.first %}
-                    <img class="img-responsive" src='http://api.propiet.com/media/{{image.file}}' />
-                  {% endif %}
-                {% endfor %}
+
+                {% if post['post_photos'] %}
+                    {% for key,photo in post['post_photos'] %}
+                        {% if key==0 %}
+                            <img  class="img-responsive" href="{{ url('public_post',{'id':post.id,'title':post.title|replace({' ':'-'})}) }}" src="{{photo['file']}}"/>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                     <img  class="img-responsive" href="{{ url('public_post',{'id':post.id,'title':(post.property.subcategory.name ~ '-' ~  post.property.location.address ~ '-' ~ post.city.name ~ '-' ~ post.region.name)|lower|raw|replace({' ':'-'})}) }}" src="{{asset('bundles/nucleushubcms/images/not_img.jpg') }}"/>
+                {% endif %}
+                
               </div>
 
-              <a href="{{path('public_post',{'id':post.data.post_data.id,'title':post.data.post_data.title})}}">
+              <a href="{{path('public_post',{'id':post.id,'title':post.title})}}">
                 <div class="col-md-2">
-                  <h5><strong>{{post.data.location.address|upper}}</strong></h5>
-                  <h6>{{post.data.post_data.city.name}}</h6>
+                  <h5><strong>{{post.property.location.address|upper}}</strong></h5>
+                  <h6>{{post.city.name}}</h6>
 
                 </div>
               </a>
 
               <div class="col-md-2" style="width: 13%;">
-                <h5><strong>{{post.data.post_data.category.name|upper}}</strong></h5>
-                <h6>{{post.data.post_data.operation.name}}</h6>
+                <h5><strong>{{post.property.category.name|upper}}</strong></h5>
+                <h6>{{post.operation.operation}}</h6>
               </div>
 
               <div class="col-xs-1" style="width: 13%;">
-                <h5><strong>{% if post.data.post_data.currency.id == 1 %}
-                                        ARS
+                <h5><strong>{% if post.currency.id == 1 %}                                        ARS
                                         {% else %}
                                         USD
                                         {% endif %}
-                  {{post.data.post_data.price|number_format(0, ',', '.')}}</strong></h5>
-                  <h6>{% if post.data.property.expenses != 'None' %}
-                      Exp. ARS {{post.data.property.expenses|number_format(0, ',', '.')}}
+                  {{post.price|number_format(0, ',', '.')}}</strong></h5>
+                  <h6>{% if post.property.expenses != 'None' %}
+                      Exp. ARS {{post.property.expenses|number_format(0, ',', '.')}}
                       {% endif %}</h6>
               </div>
 
               <div class="col-md-1" style="width: 11%;">
-                <h5><strong>{{post.data.property.square_meters|number_format(0, ',', '.')}} m<sup>2</sup> Tot.</strong></h5>
-                <h6>{% if post.data.property.total_covered_meters != 'None' %}{{post.data.property.total_covered_meters|number_format(0, ',', '.')}} m<sup>2</sup> Cub.{% endif %}</h6>
+                <h5><strong>{{post.property.square_meters|number_format(0, ',', '.')}} m<sup>2</sup> Tot.</strong></h5>
+                <h6>{% if post.property.total_covered_meters != 'None' %}{{post.property.total_covered_meters|number_format(0, ',', '.')}} m<sup>2</sup> Cub.{% endif %}</h6>
               </div>
 
               <div class="col-md-1" style="width: 12%;">
-                 <h5><strong>{{post.data.property.quantityBedrooms}} Dorm/ {{post.data.property.quantityAmbiences}} Amb</strong></h5>
-                <h6>{{post.data.property.quantityBathrooms}} baños</h6>
-
+                 <h5><strong>{{post.property.quantityBedrooms}} Dorm/ {{post.property.quantityAmbiences}} Amb</strong></h5>
+                <h6>{{post.property.quantityBathrooms}} baños</h6>
+                
+                
               </div>
+              {% set post_user = post_service.getAgent(post.id) %}
               {% if (routes[1]['title'] == 'Red Interna') %}
               <div class="col-md-1" style="width:15%">
-                {% if post.data.post_data.role == 'ROLE_COMPANY' %}
+                  
+
+                  {% if post_user.role == 'ROLE_COMPANY' %}
+
                   <span class="glyphicon glyphicon-info-sign"></span>Inmobiliaria
+                  <h5>{{ post_user.agency_name }} </h5>
+                  <h6 class="phone_{{post.id}}" style="display:none">{{ post_user.phone}}</h6>
+                  <button type="button" class="btn btn-info btn-md show_phone" data-id="{{post.id}}"> Mostrar Telefono</button>
                 
-                  <h5>{{ post.data.user_profile.agency_name }} </h5>
-                  <h6 class="phone_{{post.data.post_data.id}}" style="display:none">{{ post.data.user_profile.phone}}</h6>
-                  <button type="button" class="btn btn-info btn-md show_phone" data-id="{{post.data.post_data.id}}"> Mostrar Telefono</button>
                   {% else %}
 
-                  <h5>{{ post.data.agent_profile.agency_name }} </h5>
-                  <h6 class="phone_{{post.data.post_data.id}}" style="display:none">{{ post.data.agent_profile.phone}}</h6>
-                  <button type="button" class="btn btn-info btn-md show_phone" data-id="{{post.data.post_data.id}}"> Mostrar Telefono</button>
+                  <h5> {{ post_user.agency_name }} </h5>
+                  <h6 class="phone_{{post.id}}" style="display:none">{{ post_user.phone }}</h6>
+                  <button type="button" class="btn btn-info btn-md show_phone" data-id="{{post.id}}"> Mostrar Telefono</button>
                   {% endif %}
                 
                
@@ -117,15 +127,15 @@
                     Acciones <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a class="show_note" data-id="{{post.data.post_data.id}}">Ver Nota</a></li>
-                    {% if post.data.user.id == user.id %}
-                      <li><a href="/admin/publicaciones/editar/{{post.data.post_data.id}}" >Editar</a></li>
+                    <li><a class="show_note" data-id="{{post.id}}">Ver Nota</a></li>
+                    {% if post.user.id == user.id %}
+                      <li><a href="/admin/publicaciones/editar/{{post.id}}" >Editar</a></li>
                     {% endif %}
-                    {% if post.data.post.status == 3 and post.data.post_data.role == 'ROLE_COMPANY' %}
-                      <li><a href="#" class="show_agent" data-id="{{post.data.post_data.id}}">Datos Agente</a></li>
+                    {% if post.status == 3 and post_user.role == 'ROLE_COMPANY' %}
+                      <li><a href="#" class="show_agent" data-id="{{post.id}}">Datos Agente</a></li>
                     {% endif %}
                     {% if (routes[1]['title'] == 'De Terceros')%}
-                        <li><a id="button-assign" data-id="{{post.data.post_data.id}}" href="return false;">
+                        <li><a id="button-assign" data-id="{{post.id}}" href="return false;">
                         Asignar</a></li>
                     {% endif %}
                   </ul>
@@ -135,15 +145,15 @@
               </div>
 
               <!-- NOTA -->
-              <div class="col-md-12 alert alert-info note_{{post.data.post_data.id}}" role="alert" style="margin: 5px;padding:5px;width:98%;display:none;" >
-                Nota: {{post.data.post_data.hidden_note}}
+              <div class="col-md-12 alert alert-info note_{{post.id}}" role="alert" style="margin: 5px;padding:5px;width:98%;display:none;" >
+                Nota: {{post.hidden_note}}
               </div>
               <!-- Datos de Agente -->
               <!-- Needs to be published(3) and be a Inmobilaria Post -->
-              {% if post.data.post.status == 3 and post.data.post_data.role == 'ROLE_COMPANY' %}
-                <div class="col-md-12 alert alert-info agent_{{post.data.post_data.id}}" role="alert" style="margin: 5px;padding:5px;width:98%;display:none;" >
-                  <strong>Nombre:</strong> {{post.data.agent_profile.agency_name|capitalize}} 
-                  <strong>Telefono:</strong>  {{post.data.agent_profile.phone}} 
+              {% if post.status == 3 and post_user.role == 'ROLE_COMPANY' %}
+                <div class="col-md-12 alert alert-info agent_{{post.id}}" role="alert" style="margin: 5px;padding:5px;width:98%;display:none;" >
+                  <strong>Nombre:</strong> {{post_user.firstname_agent|capitalize}} {{post_user.lastname_agent|capitalize}} 
+                  <strong>Telefono:</strong>  {{post_user.phone_agent}} 
                 </div>
               {% endif %}
             </li>
@@ -151,7 +161,7 @@
           
         {% endfor %}
         {% if pagination.count !=1 %}                  
-            {% embed 'NucleusHubCmsBundle::Widget/pagination.html.twig' %}
+            {% embed 'NucleusHubCmsBundle::Widget/pagination_search.html.twig' %}
             {% endembed %}
         {% endif %}
       {% else %}

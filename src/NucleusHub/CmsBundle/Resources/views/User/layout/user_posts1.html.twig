@@ -1,120 +1,157 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <span class="glyphicon glyphicon-list"></span> Listado
+        <span class="pull-right label label-info">{% if (hasPosts) %}{{pagination.count}} {% else %}0{% endif %}</span>
+    </div>
+    <!-- Panel Showing all the Posts -->
+    <div class="panel-body">
 
-  <div class="panel panel-default">
-      <div class="panel-heading">
-          <span class="glyphicon glyphicon-list"></span> Listado
-          <span class="pull-right label label-info">{% if (hasPosts) %}{{pagination.count}} {% else %}0{% endif %}</span>
+      <!-- Actions Messages -->
+      <div id="successAssign" class="alert alert-success" style="display:none;">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>¡Asignadas exitosamente!</strong> Las publicaciónes se añadieron a su lista.
       </div>
-      <div class="panel-body">
-        <div id="successAssign" class="alert alert-success" style="display:none;">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          <strong>¡Asignadas exitosamente!</strong> Las publicaciónes se añadieron a su lista.
-        </div>
-        <div id="successStatus" class="alert alert-success" style="display:none;">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          <strong>¡Guardado exitosamente!</strong> Se ha modificado el estado de la publicación.
-        </div>
-        <div id="successUnassign" class="alert alert-success" style="display:none;">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          <strong>¡Removidas exitosamente!</strong> Las publicaciónes se removieron de su lista.
-        </div>
-        <div id="errorAssign" class="alert alert-danger" style="display:none;">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          <strong>¡Ha ocurrido un error!</strong> Intente nuevamente m&aacute;s tarde.
-        </div>
-        {% if hasPosts %}
-          <ul class="list-group">
-          {% if (user.roles[0] == 'ROLE_AGENT') %}
-            <form id="form-assign">
-          {% endif %}
-            {% for post in posts %}
-              <li id="post-{{post.id}}" class="list-group-item">
-                  <div class="row">
-                    <div class="col-md-8">                           
-                      <h4><span class="glyphicon glyphicon-link"></span> <a href="{{ url('public_post',{'id':post.id,'title':post.title|replace({' ':'-'})}) }}" target="_blank">
-                      {{post.title|length > 64 ? post.title|slice(0, 64) ~ '...' : post.title}}
-                      </a></h4>
-                      <p class="small">                                   
-                          {% if (post.status == 0) %}
-                            <span class="label label-danger">Archivada</span>
-                            {% elseif (post.status == 1) %}
-                            <span class="label label-info">Nueva</span>
-                            {% elseif (post.status == 2) %}
-                            <span class="label label-warning">Pausada</span>
-                            {% elseif (post.status == 3) %}
-                            <span class="label label-success">Publicada</span>
-                            {% elseif (post.status == 4) %}
-                            <span class="label label-success">Finalizada</span>
-                          {% endif %}
-                         
-                          |  <i class="glyphicon glyphicon glyphicon-usd"></i>{{post.price|number_format(0, '.')}} <span class="label label-warning">{% if (post.currency_id == 1) %}ARS${% else %}US${% endif %}</span>
-                          |  <i class="glyphicon glyphicon-user"></i> <a href="#">Ver perfil</a> 
-                          |  <i class="glyphicon glyphicon-calendar"></i> {{post.creation_date|date("d/m/Y h:i")}}
-                      </p>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="btn-toolbar pull-right" role="toolbar">                                  
-                          {% if (user.id == post.user_id) %}
-                            <div class="btn-group">
-                                {% if (post.status == 4) %}
-                                  <a href="{{ url('public_post',{'id':post.id,'title':post.title|replace({' ':'-'})}) }}" target="_blank" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-eye-open"></span> Ver</a>
-                                {% endif %}
-                                {% if (post.status == 0) %}
-                                  <a href="{{ url('public_post',{'id':post.id,'title':post.title|replace({' ':'-'})}) }}" target="_blank" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-eye-open"></span> Ver</a>
-                                  <a href="#" class="btn btn-default btn-sm button-status" data-id="{{post.id}}" data-status="1"><span class="glyphicon glyphicon-folder-open"></span> Desarchivar</a>
-                                {% endif %}
-                                {% if (post.status == 1) %}
-                                  <a href="{{ url('public_post',{'id':post.id,'title':post.title|replace({' ':'-'})}) }}" target="_blank" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-eye-open"></span> Ver</a>      
-                                  <a href="{{url('edit_post_user',{'id':post.id})}}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> Editar</a>
-                                    {% if (user.roles[0] == 'ROLE_AGENT') %}
-                                      <a href="#" class="btn btn-default btn-sm button-status" data-id="{{post.id}}" data-status="3"><span class="glyphicon glyphicon-play"></span> Publicar</a>
-                                   {% endif %}
-                                {% endif %}
-                                {% if (post.status == 2) %}
-                                  <a href="{{url('edit_post_user',{'id':post.id})}}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> Editar</a>
-                                  <a href="#" class="btn btn-default btn-sm button-status" data-id="{{post.id}}" data-status="3"><span class="glyphicon glyphicon-play"></span> Reanudar</a>
-                                  <a href="#" class="btn btn-default btn-sm button-status" data-id="{{post.id}}" data-status="0"><span class="glyphicon glyphicon-ban-circle"></span> Archivar</a> 
-                                {% endif %}
-                                {% if (post.status == 3) %}
-                                  <a href="{{url('edit_post_user',{'id':post.id})}}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> Editar</a>
-                                  <a href="#" class="btn btn-default btn-sm button-status" data-id="{{post.id}}" data-status="2"><span class="glyphicon glyphicon-pause"></span> Pausar</a>
-                                  <a href="#" class="btn btn-default btn-sm button-status" data-id="{{post.id}}" data-status="0"><span class="glyphicon glyphicon-folder-close"></span> Archivar</a> 
-                                {% endif %}
-                            </div>                               
-                          {% endif %}
-                          {% if (user.id != post.user_id and user.roles[0] == 'ROLE_AGENT') %}
-                            <div class="btn-group">                                        
-                              <a href="{{url('edit_post_user',{'id':post.id})}}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> Editar</a>
-                              <a href="#" class="btn btn-default btn-sm button-status" data-id="{{post.id}}" data-status="0"><span class="glyphicon glyphicon-folder-close"></span> Archivar</a>                                        
-                            </div>
-                            <div class="btn-group">
-                              <span class="button-checkbox">
-                                <button type="button" class="btn btn-sm" data-id="{{post.id}}" data-color="success"><span class="glyphicon glyphicon-pushpin"></span></button>
-                                <input type="checkbox" name="post[]" class="hidden" value="{{post.id}}" />
-                              </span>
-                            </div>
-                          {% endif %}                                    
-                      </div>
-                    </div>
-                  </div>
-              </li>
-            {% endfor %}
-            {% if (user.roles[0] == 'ROLE_AGENT') %}
-              </form>
-            {% endif %}
-          </ul>
-          {% else %}
-          <div class="alert alert-danger">
+
+      <div id="successStatus" class="alert alert-success" style="display:none;">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>¡Guardado exitosamente!</strong> Se ha modificado el estado de la publicación.
+      </div>
+
+      <div id="successUnassign" class="alert alert-success" style="display:none;">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>¡Removidas exitosamente!</strong> Las publicaciónes se removieron de su lista.
+      </div>
+
+      <div id="errorAssign" class="alert alert-danger" style="display:none;">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>¡Ha ocurrido un error!</strong> Intente nuevamente m&aacute;s tarde.
+      </div>
+      <!-- Finish Actions Messages -->
+
+      {% if hasPosts %}
+        
+          <li id="" class="list-group-item">            
+            <div class="row">                        
+              <div class="col-md-1"></div>
+              <div class="col-md-2"> <h4>Dirección</h4></div>
+              <div class="col-md-2" style="width: 13%;"><h4>Operación</h4></div>
+              <div class="col-md-2" style="width: 11%;"> <h4>Precio</h4></div>
+              <div class="col-md-1" style="width: 13%;"><h4>Superficies</h4></div>
+              <div class="col-md-1" style="width: 12%;"><h4>Dorm/Baños</h4></div>
+              {% if (routes[1]['title'] == 'Red Interna') %}<div class="col-md-2" style="width: 15%;"><h4>Agente</h4></div>{% endif %}
+              <div class="col-md-1"><h4>Acciones</h4></div>
+            </div>
+        {% for post in posts %}
+        
+          <li id="" class="list-group-item">
+            
+            <div class="row">
+                        
+              <div class="col-md-1">
+                
+              </div>
+
+              <a href="{{path('public_post',{'id':post.data.post_data.id,'title':post.data.post_data.title})}}">
+                <div class="col-md-2">
+                  <h5><strong>{{post.data.post.location.address|upper}}</strong></h5>
+                  <h6>{{post.data.post.property.city.name}}</h6>
+
+                </div>
+              </a>
+
+              <div class="col-md-2" style="width: 13%;">
+                <h5><strong>{{post.data.post_data.category.name|upper}}</strong></h5>
+                <h6>{{post.data.post_data.operation.name}}</h6>
+              </div>
+
+              <div class="col-xs-1" style="width: 13%;">
+                <h5><strong>{% if post.data.post_data.currency.id == 1 %}                                        ARS
+                                        {% else %}
+                                        USD
+                                        {% endif %}
+                  {{post.data.post_data.price|number_format(0, ',', '.')}}</strong></h5>
+                  <h6>{% if post.data.property.expenses != 'None' %}
+                      Exp. ARS {{post.data.property.expenses|number_format(0, ',', '.')}}
+                      {% endif %}</h6>
+              </div>
+
+              <div class="col-md-1" style="width: 11%;">
+                <h5><strong>{{post.data.property.square_meters|number_format(0, ',', '.')}} m<sup>2</sup> Tot.</strong></h5>
+                <h6>{% if post.data.property.total_covered_meters != 'None' %}{{post.data.property.total_covered_meters|number_format(0, ',', '.')}} m<sup>2</sup> Cub.{% endif %}</h6>
+              </div>
+
+              <div class="col-md-1" style="width: 12%;">
+                 <h5><strong>{{post.data.property.quantityBedrooms}} Dorm/ {{post.data.property.quantityAmbiences}} Amb</strong></h5>
+                <h6>{{post.data.property.quantityBathrooms}} baños</h6>
+
+              </div>
+              {% if (routes[1]['title'] == 'Red Interna') %}
+              <div class="col-md-1" style="width:15%">
+                {% if post.data.post_data.role == 'ROLE_COMPANY' %}
+                  <span class="glyphicon glyphicon-info-sign"></span>Inmobiliaria
+                
+                  <h5>{{ post.data.user_profile.agency_name }} </h5>
+                  <h6 class="phone_{{post.data.post_data.id}}" style="display:none">{{ post.data.user_profile.phone}}</h6>
+                  <button type="button" class="btn btn-info btn-md show_phone" data-id="{{post.data.post_data.id}}"> Mostrar Telefono</button>
+                  {% else %}
+
+                  <h5>{{ post.data.agent_profile.agency_name }} </h5>
+                  <h6 class="phone_{{post.data.post_data.id}}" style="display:none">{{ post.data.agent_profile.phone}}</h6>
+                  <button type="button" class="btn btn-info btn-md show_phone" data-id="{{post.data.post_data.id}}"> Mostrar Telefono</button>
+                  {% endif %}
+                
+               
+              </div>
+              {% endif %}
+
+              <div class="col-md-1">
+
+                <!-- Single button -->
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Acciones <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a class="show_note" data-id="{{post.data.post_data.id}}">Ver Nota</a></li>
+                    {% if post.data.user.id == user.id %}
+                      <li><a href="/admin/publicaciones/editar/{{post.data.post_data.id}}" >Editar</a></li>
+                    {% endif %}
+                    {% if post.data.post.status == 3 and post.data.post_data.role == 'ROLE_COMPANY' %}
+                      <li><a href="#" class="show_agent" data-id="{{post.data.post_data.id}}">Datos Agente</a></li>
+                    {% endif %}
+                    {% if (routes[1]['title'] == 'De Terceros')%}
+                        <li><a id="button-assign" data-id="{{post.data.post_data.id}}" href="return false;">
+                        Asignar</a></li>
+                    {% endif %}
+                  </ul>
+                </div>
+            
+
+              </div>
+
+              <!-- NOTA -->
+              <div class="col-md-12 alert alert-info note_{{post.data.post_data.id}}" role="alert" style="margin: 5px;padding:5px;width:98%;display:none;" >
+                Nota: {{post.data.post_data.hidden_note}}
+              </div>
+              <!-- Datos de Agente -->
+              <!-- Needs to be published(3) and be a Inmobilaria Post -->
+              {% if post.data.post.status == 3 and post.data.post_data.role == 'ROLE_COMPANY' %}
+                <div class="col-md-12 alert alert-info agent_{{post.data.post_data.id}}" role="alert" style="margin: 5px;padding:5px;width:98%;display:none;" >
+                  <strong>Nombre:</strong> {{post.data.agent_profile.agency_name|capitalize}} 
+                  <strong>Telefono:</strong>  {{post.data.agent_profile.phone}} 
+                </div>
+              {% endif %}
+            </li>
+          
+          
+        {% endfor %}
+        {% if pagination.count !=1 %}                  
+            {% embed 'NucleusHubCmsBundle::Widget/pagination.html.twig' %}
+            {% endembed %}
+        {% endif %}
+      {% else %}
+
+        <div class="alert alert-danger">
             No se encontraron <strong>publicaciones</strong> de este tipo. Para crear una nueva publiciación, presione el bot&oacute;n <strong>"+ CREAR NUEVA"</strong>.
-          </div>                       
-          {% endif %}
-      </div>
-      <div class="row">
-        <div class="col-md-6 col-md-offset-5"> 
-          {% if (hasPosts) %}                  
-            {% include 'NucleusHubCmsBundle:Widget:pagination.html.twig' with {'pagination': pagination} %}
-          {% endif %}
         </div>
-      </div>
-  </div>
-    
-      
+      {% endif %}

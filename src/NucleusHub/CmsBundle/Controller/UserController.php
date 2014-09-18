@@ -65,34 +65,51 @@ class UserController extends Controller
         $user = $token->getUser();
         $apiKey = $user->getToken();
         $hasPosts = true;
-        
-        $page = $request->request->get('page');
-        $post_service = $this->get('post_service');
-        $response = $post_service->SearchPosts($request,$user->getId());
+       
+        $queryParameters = array("status" => 3,"address" => $request->request->get('address'));
 
-        if ($response == 'ERR_EMPTY_LIST') {
+        if($request->request->get('page'))
+            $page_name = $request->request->get('page');
+
+        if($page_name == "Red Interna"){
+            $url = "admin_publications_list_red_interna";
+        }elseif($page_name == "Publicadas"){
+            $url = "admin_publications_list_published";
+            $queryParameters['userid'] = $user->getId();            
+        }elseif($page_name == "Asignadas"){
+            $url = "admin_publications_list_assigned";
+            $queryParameters['agentid'] = $user->getId();
+        }elseif($page_name == "Nuevas"){
+            $url = "admin_publications_list_new";
+            $queryParameters['userid'] = $user->getId();
+            $queryParameters['status'] = 1;
+        }else{
+            $url = "admin_publications_list_published"; 
+        }
+
+        
+        $search_service = $this->get('search_service');
+        $response = $search_service->getPostListQuery($queryParameters,$page);
+
+
+        if($response['objects']){
+            $posts = $response['objects'];
+        }else{
             $hasPosts = false;
-        } else {
-            
-            $posts = $response['data']['list'];
+        }
+        if($response['pagination']){
             $pagination = $response['pagination'];
+            $pagination['page'] = $pagination['actual_page'];
         }
         
-        if($page == "Red Interna"){
-            $url = "admin_publications_list_red_interna";
-        }elseif($page == "Publicadas"){
-            $url = "admin_publications_list_published";            
-        }elseif($page == "Asignadas"){
-            $url = "admin_publications_list_assigned";
-        }elseif($page == "Nuevas"){
-            $url = "admin_publications_list_new";
-        }
+        
 
         $routes[] = array('title'=>'Publicaciones', 'isActive'=> false,'href'=> $this->get('router')->generate('admin_publications_list'));
-        $routes[] = array('title'=> $page, 'isActive'=> true,'href'=> $this->get('router')->generate($url));
+        $routes[] = array('title'=> $page_name, 'isActive'=> true,'href'=> $this->get('router')->generate($url));
         
         return $this->render('NucleusHubCmsBundle:User:index.html.twig',
-            array('routes' => $routes, 'user' => $user, 'posts'=> $posts, 'pagination'=> $pagination, 'hasPosts' => $hasPosts,'search' => $request->request->get('address')));
+            array('routes' => $routes, 'user' => $user, 'posts'=> $posts, 'pagination'=> $pagination, 'hasPosts' => $hasPosts,'search' => $request->request->get('address'))
+            );
     }
 
     /**
@@ -112,15 +129,22 @@ class UserController extends Controller
             $page = $request->query->get('page');
         
 
-        $post_service = $this->get('post_service');
-        $response = $post_service->getPostList($apiKey, $post_service::STATUS_NEW, 0,0, $page);
+        $queryParameters = array("status" => 1);
+        $search_service = $this->get('search_service');
+
+        $response = $search_service->getPostListQuery($queryParameters,$page);
+        // $post_service = $this->get('post_service');
+        // $response = $post_service->getPostList($apiKey, $post_service::STATUS_NEW, 0,0, $page);
         #$searchList = $search_service->getFiltersForSearch();
         
-        if ($response == 'ERR_EMPTY_LIST') {
+        if($response['objects']){
+            $posts = $response['objects'];
+        }else{
             $hasPosts = false;
-        } else {
-            $posts = $response['data']['list'];
+        }
+        if($response['pagination']){
             $pagination = $response['pagination'];
+            $pagination['page'] = $pagination['actual_page'];
         }
 
         $routes[] = array('title'=>'Publicaciones', 'isActive'=> false,'href'=> $this->get('router')->generate('admin_publications_list'));
@@ -131,6 +155,30 @@ class UserController extends Controller
                 'pagination'=> $pagination, 'hasPosts' => $hasPosts
                 ));
 
+    }
+
+    /**
+     * @Route("/admin/publicaciones/test", name="admin_publications_test")
+     * @Template("NucleusHubCmsBundle:Default:test.html.twig")
+     */
+    public function testAction(){
+
+       $queryParameters = array("status" => 3);
+        $search_service = $this->get('search_service');
+
+        $response = $search_service->getPostListQuery($queryParameters,$page);
+
+        if ($response == 'ERR_EMPTY_LIST') {
+            $hasPosts = false;
+        } else {
+            
+            if($response['objects']){
+                $posts = $response['objects'];
+            }
+        }
+
+        return $this->render('NucleusHubCmsBundle:Default:test.html.twig',
+            array('posts'=> $posts));
     }
 
     /**
@@ -150,15 +198,22 @@ class UserController extends Controller
             $page = $request->query->get('page');
         
 
-        $post_service = $this->get('post_service');
-        $response = $post_service->getPostList($apiKey, $post_service::STATUS_PUBLISHED, (-1),0, $page);
+        //$post_service = $this->get('post_service');
+        //$r = $post_service->getPostList($apiKey, $post_service::STATUS_PUBLISHED, (-1),0, $page);
+        //$r = $post_service->getAgent(); 
+        $queryParameters = [];
+        $search_service = $this->get('search_service');
+        $response = $search_service->getPostListQuery($queryParameters,$page);
         #$searchList = $search_service->getFiltersForSearch();
         
-        if ($response == 'ERR_EMPTY_LIST') {
+        if($response['objects']){
+            $posts = $response['objects'];
+        }else{
             $hasPosts = false;
-        } else {
-            $posts = $response['data']['list'];
+        }
+        if($response['pagination']){
             $pagination = $response['pagination'];
+            $pagination['page'] = $pagination['actual_page'];
         }
 
         $routes[] = array('title'=>'Publicaciones', 'isActive'=> false,'href'=> $this->get('router')->generate('admin_publications_list'));
@@ -173,28 +228,45 @@ class UserController extends Controller
      * @Route("/admin/publicaciones/asignadas", name="admin_publications_list_assigned")
      * @Template()
      */
-    public function postListAssignedAction()
+    public function postListAssignedAction(Request $request)
     {       
 
         $securityContext = $this->get('security.context');
         $token = $securityContext->getToken();
         $user = $token->getUser();
         $apiKey = $user->getToken();
-        $hasPosts = true;
+        $hasPosts = true;        
+        $page = 1;
 
+        if($request->query->get('page')){
+            $page = $request->query->get('page');
+        }
+        
         if($user->getRoles()[0] != 'ROLE_AGENT') {
             return new RedirectResponse($this->container->get('router')->generate('admin_publications_list'));
         }
 
-        $post_service = $this->get('post_service');
-        $response = $post_service->getPostList($apiKey, $post_service::STATUS_NONE, 0, $user->getId());
+        //$post_service = $this->get('post_service');
+        //$response = $post_service->getPostList($apiKey, $post_service::STATUS_NONE, 0, $user->getId());
+
+        //$post_service = $this->get('post_service');
+        //$r = $post_service->getPostList($apiKey, $post_service::STATUS_PUBLISHED, (-1),0, $page);
+        //$r = $post_service->getAgent(); 
+        $queryParameters = array("status" => 3,"agentid" => $user->getId());
+        $search_service = $this->get('search_service');
+        $response = $search_service->getPostListQuery($queryParameters,$page);
         
-        if ($response == 'ERR_EMPTY_LIST') {
+                  
+        if($response['objects']){
+            $posts = $response['objects'];
+        }else{
             $hasPosts = false;
-        } else {
-            $posts = $response['data']['list'];
-            $pagination = $response['pagination'];
         }
+        if($response['pagination']){
+            $pagination = $response['pagination'];
+            $pagination['page'] = $pagination['actual_page'];
+        }
+    
 
         $routes[] = array('title'=>'Publicaciones', 'isActive'=> false,'href'=> $this->get('router')->generate('admin_publications_list'));
         $routes[] = array('title'=>'Asignadas', 'isActive'=> true,'href'=> $this->get('router')->generate('admin_publications_list_assigned'));
@@ -217,14 +289,18 @@ class UserController extends Controller
         $hasPosts = true;
 
 
-        $post_service = $this->get('post_service');
-        $response = $post_service->getPostList($apiKey, $post_service::STATUS_NEW, $user->getId(),0);
+        $queryParameters = array("status" => 1,"userid" => $user->getId());
+        $search_service = $this->get('search_service');
+        $response = $search_service->getPostListQuery($queryParameters,$page);
         
-        if ($response == 'ERR_EMPTY_LIST') {
+        if($response['objects']){
+            $posts = $response['objects'];
+        }else{
             $hasPosts = false;
-        } else {
-            $posts = $response['data']['list'];
+        }
+        if($response['pagination']){
             $pagination = $response['pagination'];
+            $pagination['page'] = $pagination['actual_page'];
         }
 
         $routes[] = array('title'=>'Publicaciones', 'isActive'=> false,'href'=> $this->get('router')->generate('admin_publications_list'));
@@ -246,15 +322,22 @@ class UserController extends Controller
         $user = $token->getUser();
         $apiKey = $user->getToken();
         $hasPosts = true;        
+        $page = 1;
+        // $post_service = $this->get('post_service');
+        // $response = $post_service->getPostList($apiKey, $post_service::STATUS_PUBLISHED, $user->getId(),0);
 
-        $post_service = $this->get('post_service');
-        $response = $post_service->getPostList($apiKey, $post_service::STATUS_PUBLISHED, $user->getId(),0);
+        $queryParameters = array("status" => 3,"userid" => $user->getId());
+        $search_service = $this->get('search_service');
+        $response = $search_service->getPostListQuery($queryParameters,$page);
         
-        if ($response == 'ERR_EMPTY_LIST') {
+        if($response['objects']){
+            $posts = $response['objects'];
+        }else{
             $hasPosts = false;
-        } else {
-            $posts = $response['data']['list'];
+        }
+        if($response['pagination']){
             $pagination = $response['pagination'];
+            $pagination['page'] = $pagination['actual_page'];
         }
 
         $routes[] = array('title'=>'Publicaciones', 'isActive'=> false,'href'=> $this->get('router')->generate('admin_publications_list'));

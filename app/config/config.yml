@@ -27,6 +27,8 @@ twig:
     cache: false
     strict_variables: %kernel.debug%
     cache: false
+    globals:
+        post_service: "@post_service"
 
 # Assetic Configuration
 assetic:
