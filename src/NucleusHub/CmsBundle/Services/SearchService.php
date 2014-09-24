@@ -141,13 +141,10 @@ class SearchService
     
     public function getPropertysIds($params){
 
-        
-        
-
         $url =  $this->apiUrls['base'].$this->apiUrls['property']['list'];
 
         if($params['address'])
-            $parameters['location__address__contains'] = $params['address'];
+            $parameters['location__address__icontains'] = $params['address'];
 
         $propertys = $this->api_caller->call(new \Lsw\ApiCallerBundle\Call\HttpGetJson ($url, $parameters,true));
 
@@ -251,7 +248,8 @@ class SearchService
             $totalPages = 1;
                
                if($post['meta']['total_count']){
-                  $totalPages = (int) round(($post['meta']['total_count'] / $post['meta']['limit']));
+                  $totalPages = (int) ceil(($post['meta']['total_count'] / $post['meta']['limit']));
+                 
                }
                foreach (range($pagActual, $totalPages) as $number) {
                     $range[]=['page'=>$number];
@@ -260,14 +258,16 @@ class SearchService
                    'total_pages'=>$totalPages,
                    'actual_page'=>$pagActual,
                    'page_range'=>$range,
-                   'count'=>$post['meta']['total_count']
+                   'count'=>$post['meta']['total_count'],
+                   'page' => $pagActual,
                        ];
             }else{
                 $postList['pagination'] = [
                    'total_pages'=>NULL,
                    'actual_page'=>NULL,
                    'page_range'=>NULL,
-                   'count'=>NULL
+                   'count'=>NULL,
+                   'page' => NULL,
                        ];
             }
            

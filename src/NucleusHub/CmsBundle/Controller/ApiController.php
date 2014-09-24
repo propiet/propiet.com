@@ -119,6 +119,32 @@ class ApiController extends Controller
     }
 
     /**
+     * @Route("/api/v1/post/remove.json", name="api_post_remove")
+     * @Template()
+     * 
+     */
+    public function removePostAction(Request $request)
+    {
+        $securityContext = $this->get('security.context');
+        $token = $securityContext->getToken();
+        $user = $token->getUser();
+        $apiKey = $user->getToken();
+
+        $post_id = $request->request->get('post_id');
+
+         $integration_service = $this->get('integration_service');
+        $responseInteg = $integration_service->deletePostProperati($post_id, $apiKey);
+                    
+        $post_service = $this->get('post_service');
+        $response = $post_service->removePost($post_id, $apiKey); 
+        
+       
+        
+
+        return new JsonResponse($response);    
+    }
+
+    /**
      * @Route("/api/v1/submit/wizard.json", name="api_post_wizard")
      * @Template()
      * 
@@ -207,10 +233,7 @@ class ApiController extends Controller
     		$post_service = $this->get('post_service');
         	$response = $post_service->addPost($form_data, $apiKey);
 
-            if ($response != 'ERR_EMPTY_LIST') {
-                $integration_service = $this->get('integration_service');
-                $responseInteg = $integration_service->addPostProperati($response['id'], $apiKey);
-            }
+            
     	}
             
         return new JsonResponse($response);    
@@ -314,12 +337,12 @@ class ApiController extends Controller
             $post_service = $this->get('post_service');
             $response = $post_service->updatePost($form_data, $apiKey);
 
-            if ($response != 'ERR_EMPTY_LIST') {
-                $integration_service = $this->get('integration_service');
-                $responseIntegEl = $integration_service->deletePostProperati($postId, $apiKey);
-                $responseInteg = $integration_service->addPostProperati($postId, $apiKey);
+            // if ($response != 'ERR_EMPTY_LIST') {
+            //     $integration_service = $this->get('integration_service');
+            //     $responseIntegEl = $integration_service->deletePostProperati($postId, $apiKey);
+            //     $responseInteg = $integration_service->addPostProperati($postId, $apiKey);
                 
-            } 
+            // } 
         }
             
         return new JsonResponse($response);    
@@ -332,29 +355,25 @@ class ApiController extends Controller
      */
     public function agentAssignAction(Request $request)
     {               
-        $response = '{}';       
-        if ($request->getMethod() == 'POST') {          
+               
+        $securityContext = $this->get('security.context');
+        $token = $securityContext->getToken();
+        $user = $token->getUser();
+        $apiKey = $user->getToken();
 
-            $securityContext = $this->get('security.context');
-            $token = $securityContext->getToken();
-            $user = $token->getUser();
-            $apiKey = $user->getToken();
-
-            $data = $request->request->get('form');
-
-            $posts = array();
-            foreach ($data['posts'] as $element) {               
-                $value = $element['value'];
-                $posts[] = $value;              
-            }
-            
-            $form_data = array('posts' => $posts,
-                     'agent' => $user->getId());
-                        
-            $post_service = $this->get('post_service');
-            $response = $post_service->assignAgent($form_data, $apiKey); 
-        }
-            
+        $post_id = $request->request->get('post_id');
+                  
+        $post =  $post_id;
+        $agent = $user->getId();
+                    
+        $post_service = $this->get('post_service');
+        $response = $post_service->assignAgent($post,$agent, $apiKey); 
+        
+       
+        $integration_service = $this->get('integration_service');
+        $responseInteg = $integration_service->addPostProperati($post_id, $apiKey);
+       
+                    
         return new JsonResponse($response);    
     }
 
@@ -365,28 +384,22 @@ class ApiController extends Controller
      */
     public function agentUnassignAction(Request $request)
     {               
-        $response = '{}';       
-        if ($request->getMethod() == 'POST') {          
+                 
+        $securityContext = $this->get('security.context');
+        $token = $securityContext->getToken();
+        $user = $token->getUser();
+        $apiKey = $user->getToken();
 
-            $securityContext = $this->get('security.context');
-            $token = $securityContext->getToken();
-            $user = $token->getUser();
-            $apiKey = $user->getToken();
-
-            $data = $request->request->get('form');
-
-            $posts = array();
-            foreach ($data['posts'] as $element) {               
-                $value = $element['value'];
-                $posts[] = $value;              
-            }
-            
-            $form_data = array('posts' => $posts,
-                     'agent' => $user->getId());
-                        
-            $post_service = $this->get('post_service');
-            $response = $post_service->unassignAgent($form_data, $apiKey); 
-        }
+        $post_id = $request->request->get('post_id');
+                    
+        $post_service = $this->get('post_service');
+        $response = $post_service->unassignAgent($post_id, $apiKey); 
+        
+       
+        $integration_service = $this->get('integration_service');
+        $responseInteg = $integration_service->deletePostProperati($post_id, $apiKey);
+                
+        
             
         return new JsonResponse($response);    
     }

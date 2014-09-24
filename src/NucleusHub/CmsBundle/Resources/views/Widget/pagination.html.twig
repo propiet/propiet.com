@@ -10,7 +10,7 @@
 	    {% else %}
 	    	<li><a href="?page={{pagination.page - 1}}">«</a></li>
 	    {% endif %}
-	    {% for page in pagination.page_range %}	    
+	    {% for page in 1..pagination.total_pages %}	    
 	    	<li {% if (page == pagination.page) %}class="active"{% endif %}><a href="?page={{page}}">{{page}}</a></li>	        	    
 	    {% endfor %}
 	    {% if pagination.page == pagination.page_range|length %}

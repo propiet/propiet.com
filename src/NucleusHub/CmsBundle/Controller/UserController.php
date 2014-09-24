@@ -213,7 +213,6 @@ class UserController extends Controller
         }
         if($response['pagination']){
             $pagination = $response['pagination'];
-            $pagination['page'] = $pagination['actual_page'];
         }
 
         $routes[] = array('title'=>'Publicaciones', 'isActive'=> false,'href'=> $this->get('router')->generate('admin_publications_list'));
@@ -238,20 +237,9 @@ class UserController extends Controller
         $hasPosts = true;        
         $page = 1;
 
-        if($request->query->get('page')){
+        if($request->query->get('page'))
             $page = $request->query->get('page');
-        }
-        
-        if($user->getRoles()[0] != 'ROLE_AGENT') {
-            return new RedirectResponse($this->container->get('router')->generate('admin_publications_list'));
-        }
-
-        //$post_service = $this->get('post_service');
-        //$response = $post_service->getPostList($apiKey, $post_service::STATUS_NONE, 0, $user->getId());
-
-        //$post_service = $this->get('post_service');
-        //$r = $post_service->getPostList($apiKey, $post_service::STATUS_PUBLISHED, (-1),0, $page);
-        //$r = $post_service->getAgent(); 
+    
         $queryParameters = array("status" => 3,"agentid" => $user->getId());
         $search_service = $this->get('search_service');
         $response = $search_service->getPostListQuery($queryParameters,$page);
@@ -264,7 +252,6 @@ class UserController extends Controller
         }
         if($response['pagination']){
             $pagination = $response['pagination'];
-            $pagination['page'] = $pagination['actual_page'];
         }
     
 
@@ -279,7 +266,7 @@ class UserController extends Controller
      * @Route("/admin/publicaciones/nuevas", name="admin_publications_list_new")
      * @Template()
      */
-    public function postListNewAction()
+    public function postListNewAction(Request $request)
     {       
 
         $securityContext = $this->get('security.context');
@@ -288,7 +275,9 @@ class UserController extends Controller
         $apiKey = $user->getToken();
         $hasPosts = true;
 
-
+        if($request->query->get('page'))
+            $page = $request->query->get('page');
+    
         $queryParameters = array("status" => 1,"userid" => $user->getId());
         $search_service = $this->get('search_service');
         $response = $search_service->getPostListQuery($queryParameters,$page);
@@ -300,7 +289,6 @@ class UserController extends Controller
         }
         if($response['pagination']){
             $pagination = $response['pagination'];
-            $pagination['page'] = $pagination['actual_page'];
         }
 
         $routes[] = array('title'=>'Publicaciones', 'isActive'=> false,'href'=> $this->get('router')->generate('admin_publications_list'));
@@ -314,7 +302,7 @@ class UserController extends Controller
      * @Route("/admin/publicaciones/publicadas", name="admin_publications_list_published")
      * @Template()
      */
-    public function postListPublishedAction()
+    public function postListPublishedAction(Request $request)
     {       
 
         $securityContext = $this->get('security.context');
@@ -323,6 +311,10 @@ class UserController extends Controller
         $apiKey = $user->getToken();
         $hasPosts = true;        
         $page = 1;
+
+        if($request->query->get('page'))
+            $page = $request->query->get('page');
+    
         // $post_service = $this->get('post_service');
         // $response = $post_service->getPostList($apiKey, $post_service::STATUS_PUBLISHED, $user->getId(),0);
 
@@ -337,10 +329,9 @@ class UserController extends Controller
         }
         if($response['pagination']){
             $pagination = $response['pagination'];
-            $pagination['page'] = $pagination['actual_page'];
         }
 
-        $routes[] = array('title'=>'Publicaciones', 'isActive'=> false,'href'=> $this->get('router')->generate('admin_publications_list'));
+        $routes[] = array('title'=>'Red Interna', 'isActive'=> false,'href'=> $this->get('router')->generate('admin_publications_list_red_interna'));
         $routes[] = array('title'=>'Publicadas', 'isActive'=> true,'href'=> $this->get('router')->generate('admin_publications_list_published'));
         
         return $this->render('NucleusHubCmsBundle:User:index.html.twig',

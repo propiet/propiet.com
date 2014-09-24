@@ -96,28 +96,39 @@
                 
                 
               </div>
-              {% set post_user = post_service.getAgent(post.id) %}
-              {% if (routes[1]['title'] == 'Red Interna') %}
+              {% set post_user = post_service.getAgent(post.id).data %}
+              
               <div class="col-md-1" style="width:15%">
                   
 
                   {% if post_user.role == 'ROLE_COMPANY' %}
 
-                  <span class="glyphicon glyphicon-info-sign"></span>Inmobiliaria
-                  <h5>{{ post_user.agency_name }} </h5>
-                  <h6 class="phone_{{post.id}}" style="display:none">{{ post_user.phone}}</h6>
-                  <button type="button" class="btn btn-info btn-md show_phone" data-id="{{post.id}}"> Mostrar Telefono</button>
-                
+                    <span class="glyphicon glyphicon-info-sign"></span>Inmobiliaria
+                    <h5>{{ post_user.agency_name }} </h5>
+                    <h6 class="phone_{{post.id}}" style="display:none">{{ post_user.phone}}</h6>
+                    
                   {% else %}
-
-                  <h5> {{ post_user.agency_name }} </h5>
-                  <h6 class="phone_{{post.id}}" style="display:none">{{ post_user.phone }}</h6>
-                  <button type="button" class="btn btn-info btn-md show_phone" data-id="{{post.id}}"> Mostrar Telefono</button>
+                    {% if (routes[1]['title'] == 'Red Interna') %}
+                      <h5> {{ post_user.agency_name }} </h5>
+                      <h6 class="phone_{{post.id}}" style="display:none">{{ post_user.phone }}</h6>
+                      
+                    {% else  %}
+                      {% if post_user.role == 'ROLE_AGENT' %}
+                        <span class="glyphicon glyphicon-info-sign"></span>Agente
+                      {% elseif post_user.role == 'ROLE_USER' %}
+                        <span class="glyphicon glyphicon-info-sign"></span>Usuario
+                      {% endif %}
+                      
+                      <h5>{{ post_user.firstname}} {{post_user.lastname}} </h5>
+                      <h6 class="phone_{{post.id}}" style="display:none">{{ post_user.phone}}</h6>
+                      
+                  
+                    {% endif %}
                   {% endif %}
-                
-               
+
+                  <button type="button" class="btn btn-info btn-md show_phone" data-id="{{post.id}}"> Mostrar Telefono</button>
               </div>
-              {% endif %}
+              
 
               <div class="col-md-1">
 
@@ -135,8 +146,16 @@
                       <li><a href="#" class="show_agent" data-id="{{post.id}}">Datos Agente</a></li>
                     {% endif %}
                     {% if (routes[1]['title'] == 'De Terceros')%}
-                        <li><a id="button-assign" data-id="{{post.id}}" href="return false;">
+                        <li><a class="button-assign" id="{{post.id}}" href="#">
                         Asignar</a></li>
+                    {% endif %}
+                    {% if post_user.role == 'ROLE_AGENT' and post.status == 3 %}
+                        <li><a class="button-unassign" id="{{post.id}}" href="#">
+                        Des-Asignar</a></li>
+                    {% endif %}
+                    {% if post_user.role == 'ROLE_ADMIN' or post.user.id == user.id %}
+                        <li><a class="button-remove" id="{{post.id}}" href="#">
+                        Eliminar</a></li>
                     {% endif %}
                   </ul>
                 </div>

@@ -47,6 +47,25 @@ class PostService
         return $response;
     }
 
+    public function removePost($post_id, $apikey){
+
+        $url = $this->apiUrls['base'].$this->apiUrls['post']['remove']; 
+
+        $parameters = array('request'=>'{"data":{"post":'.$post_id.'}}',
+            'k'=>$apiKey);
+
+        $output = $this->api_caller->call(new HttpPost($url, $parameters));
+        
+        $data = json_decode($output, true);
+        
+        if($data['response']['success'] == true){
+           $response = $data['response']['data'];
+        } else {
+            $response = $data['response'];
+        }      
+        return $response;
+    }
+
     public function updatePost($formData, $apiKey){
 
         $url = 'http://api.propiet.com/v1/post/update';
@@ -105,12 +124,12 @@ class PostService
         return $response;
     }
 
-    public function assignAgent($formData, $apiKey){
+    public function assignAgent($post,$agent, $apiKey){
 
         $url = 'http://api.propiet.com/v1/post/assign';
 
         $formData = json_encode($formData);
-        $parameters = array('request'=>'{"data":'.$formData.'}',
+        $parameters = array('request'=>'{"data": { "post": '.$post.', "agent" : '.$agent.'}}',
             'k'=>$apiKey);
         
         $output = $this->api_caller->call(new HttpPost($url, $parameters));        
@@ -124,12 +143,11 @@ class PostService
         return $response;
     }
 
-    public function unassignAgent($formData, $apiKey){
+    public function unassignAgent($post, $apiKey){
 
         $url = 'http://api.propiet.com/v1/post/unassign';
 
-        $formData = json_encode($formData);
-        $parameters = array('request'=>'{"data":'.$formData.'}',
+        $parameters = array('request'=>'{"data": {"post": '.$post.' }}',
             'k'=>$apiKey);
         
         $output = $this->api_caller->call(new HttpPost($url, $parameters));        
@@ -233,6 +251,7 @@ class PostService
     }
     
     public function getAgentData($request){
+        
         $url = $this->apiUrls['base'].$this->apiUrls['post']['agent'];
         $parameters = array('request'=>$request,'k'=>  $this->apikey);
         $output = $this->api_caller->call(new HttpPost($url, $parameters));
@@ -299,9 +318,9 @@ class PostService
         
         if($data['response']['success'] == true){
 
-           $response = $data['response']['data'];
+           $response = $data['response'];
         } else {
-            $response = $data['response'];
+            $response = false;
         }      
         return $response;
 

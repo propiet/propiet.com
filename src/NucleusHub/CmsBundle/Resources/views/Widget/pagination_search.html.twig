@@ -11,7 +11,8 @@
 	    	<li><a href="?page={{pagination.actual_page - 1}}">«</a></li>
 	    {% endif %}
 	    {% for key,value in pagination.page_range %}	    
-	    	<li {% if (value.page == pagination.actual_page) %}class="active"{% endif %}><a href="?page={{value.page}}">{{value.page}}</a></li>	        	    
+	    	<li {% if (value.page == pagination.actual_page) %}class="active"{% endif %}>
+	    		<a href="?page={{value.page}}">{{value.page}}</a></li>	        	    
 	    {% endfor %}
 	    {% if pagination.actual_page == pagination.page_range|length %}
 	    	<li class="disabled"><a href="javascript:void(0);">»</a></li>

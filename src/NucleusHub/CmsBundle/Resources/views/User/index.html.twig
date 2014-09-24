@@ -19,10 +19,7 @@
                <span class="pull-right">
                       <a href="{{url('add_post_user')}}" class="btn btn-lg btn-default">
                       <span class="glyphicon glyphicon-plus"></span> CREAR</a>
-                      {% if (routes[1]['title'] == 'Asignadas')%}
-                        <a id="button-unassign" href="return false;" class="btn btn-lg btn-default" disabled>
-                        <span class="glyphicon glyphicon-pushpin"></span> REMOVER</a>
-                      {% endif %}
+                      
 
                       {% embed "NucleusHubCmsBundle::User/layout/user_menu.html.twig" %}
                       {% endembed %}
