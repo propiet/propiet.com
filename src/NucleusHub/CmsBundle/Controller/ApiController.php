@@ -132,7 +132,8 @@ class ApiController extends Controller
 
         $post_id = $request->request->get('post_id');
 
-         $integration_service = $this->get('integration_service');
+        #INTEGRATIONS REMOVE
+        $integration_service = $this->get('integration_service');
         $responseInteg = $integration_service->deletePostProperati($post_id, $apiKey);
                     
         $post_service = $this->get('post_service');
@@ -151,7 +152,9 @@ class ApiController extends Controller
      */
     public function submitWizardAction(Request $request)
     {             	
-        $response = '{}';   	
+        $response = '{}';
+        $integrate = false; 
+
     	if ($request->getMethod() == 'POST') {    		
 
     		$securityContext = $this->get('security.context');
@@ -221,9 +224,11 @@ class ApiController extends Controller
 	        if($userRoles[0] == 'ROLE_USER' || $userRoles[0] == 'ROLE_COMPANY'){
 				$post['status'] = 1; //NEW
 	        }
-	        if($userRoles[0] == 'ROLE_AGENT'){
+	        if($userRoles[0] == 'ROLE_AGENT' || $userRoles[0] == 'ROLE_ADMIN'){
 	        	$post['status'] = 3; //PUBLISHED
                 $post['agent'] = $property['user']; //PUBLISHED
+                $integrate = true;
+                
 	        }
 
     		$form_data = array('property' => $property,
@@ -232,11 +237,18 @@ class ApiController extends Controller
     		
     		$post_service = $this->get('post_service');
         	$response = $post_service->addPost($form_data, $apiKey);
-
             
+            
+            if($integrate){
+                //IF ROLE PUBLISH DIRECTLY INTEGRATE 
+                //INTEGRATION PROPERATI
+                $integration_service = $this->get('integration_service');
+                $responseInteg = $integration_service->addPostProperati($response["id"], $apiKey);
+
+            }
     	}
             
-        return new JsonResponse($response);    
+        return new JsonResponse($response);   
     }
 
         /**
@@ -311,7 +323,9 @@ class ApiController extends Controller
             $location['region'] = 1;
             $location['id'] = $locationId; //PUBLISHED            
             
-            $post['user'] = $property['user'];
+           
+
+            //$post['user'] = $user_info;
             $post['category'] = $property['category'];
             $post['operation'] = $property['operation'];
             $post['currency'] = $property['currency'];
@@ -320,6 +334,7 @@ class ApiController extends Controller
             $post['city'] = $location['city'];
             $post['id'] = $postId; //PUBLISHED
             
+
 
             $userRoles = $user->getRoles();
             if($userRoles[0] == 'ROLE_USER' || $userRoles[0] == 'ROLE_COMPANY'){
@@ -337,12 +352,12 @@ class ApiController extends Controller
             $post_service = $this->get('post_service');
             $response = $post_service->updatePost($form_data, $apiKey);
 
-            // if ($response != 'ERR_EMPTY_LIST') {
-            //     $integration_service = $this->get('integration_service');
-            //     $responseIntegEl = $integration_service->deletePostProperati($postId, $apiKey);
-            //     $responseInteg = $integration_service->addPostProperati($postId, $apiKey);
+            #INTEGRATIONS UPDATE ONLY IF IS ASSIGN    
+            $integration_service = $this->get('integration_service');
+            $responseIntegEl = $integration_service->deletePostProperati($postId, $apiKey);
+            $responseInteg = $integration_service->addPostProperati($postId, $apiKey);
                 
-            // } 
+           
         }
             
         return new JsonResponse($response);    

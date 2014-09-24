@@ -6,10 +6,8 @@
     </button>
     <ul class="dropdown-menu">
 
-      {% if user.roles[0] == 'ROLE_USER' or user.roles[0] == 'ROLE_COMPANY' %}              
-          <li {% if (routes[1]['title'] == 'Nuevas')%}class="active"{% endif %}><a href="{{url('admin_publications_list_new')}}"><span class="glyphicon glyphicon-asterisk"></span> Nuevas</a></li>
-   {% endif %}           
-   {% if user.roles[0] == 'ROLE_AGENT' %}
+               
+   {% if user.roles[0] == 'ROLE_AGENT' or user.roles[0] == 'ROLE_ADMIN' %}
           <li {% if (routes[1]['title'] == 'Red Interna')%}class="active"{% endif %}>
             <a href="{{url('admin_publications_list_red_interna')}}"><span class="glyphicon glyphicon-eye-open"></span> Red Interna</a>
           </li>
@@ -22,14 +20,14 @@
             <a href="{{url('admin_publications_list_assigned')}}"><span class="glyphicon glyphicon-pushpin"></span> Asignadas</a>
           </li>
 
-          <li {% if (routes[1]['title'] == 'Nuevas')%}class="active"{% endif %}>
-            <a href="{{url('admin_publications_list_new')}}"><span class="glyphicon glyphicon-asterisk"></span> Nuevas</a>
-          </li>                   
+                            
    {% endif %}
 
           <li {% if (routes[1]['title'] == 'Publicadas')%}class="active"{% endif %}>
             <a href="{{url('admin_publications_list_published')}}"><span class="glyphicon glyphicon-ok"></span> Publicadas</a>
           </li>
+
+          <li {% if (routes[1]['title'] == 'Nuevas')%}class="active"{% endif %}><a href="{{url('admin_publications_list_new')}}"><span class="glyphicon glyphicon-asterisk"></span> Nuevas</a></li>
           <!--
           <li {% if (routes[1]['title'] == 'Pausadas')%}class="active"{% endif %}>
             <a href="{{url('admin_publications_list_paused')}}"><span class="glyphicon glyphicon-pause"></span> Pausadas</a>

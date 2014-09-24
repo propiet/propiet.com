@@ -83,6 +83,9 @@ class UserController extends Controller
             $url = "admin_publications_list_new";
             $queryParameters['userid'] = $user->getId();
             $queryParameters['status'] = 1;
+        }elseif($page_name == "De Terceros"){
+            $url = "admin_publications_list_de_terceros";
+            $queryParameters['status'] = 1;
         }else{
             $url = "admin_publications_list_published"; 
         }

@@ -38,12 +38,12 @@
               <div class="col-md-2" style="width: 11%;"> <h4>Precio</h4></div>
               <div class="col-md-1" style="width: 13%;"><h4>Superficies</h4></div>
               <div class="col-md-1" style="width: 12%;"><h4>Dorm/Baños</h4></div>
-              {% if (routes[1]['title'] == 'Red Interna') %}<div class="col-md-2" style="width: 15%;"><h4>Agente</h4></div>{% endif %}
+              <div class="col-md-2" style="width: 15%;"><h4>Datos Usuario</h4></div>
               <div class="col-md-1"><h4>Acciones</h4></div>
             </div>
         {% for post in posts %}
         
-          <li id="" class="list-group-item">
+          <li id="" class="list-group-item" data-id="{{post.id}}">
             
             <div class="row">
                         
@@ -96,8 +96,9 @@
                 
                 
               </div>
-              {% set post_user = post_service.getAgent(post.id).data %}
-              
+              {% if post_service.getAgent(post.id).success %}
+                {% set post_user = post_service.getAgent(post.id).data %}
+              {% endif %}
               <div class="col-md-1" style="width:15%">
                   
 
@@ -109,8 +110,8 @@
                     
                   {% else %}
                     {% if (routes[1]['title'] == 'Red Interna') %}
-                      <h5> {{ post_user.agency_name }} </h5>
-                      <h6 class="phone_{{post.id}}" style="display:none">{{ post_user.phone }}</h6>
+                      <h5> {{ post_user.agency_name_agent }} </h5>
+                      <h6 class="phone_{{post.id}}" style="display:none">{{ post_user.phone_agent }}</h6>
                       
                     {% else  %}
                       {% if post_user.role == 'ROLE_AGENT' %}
@@ -139,8 +140,12 @@
                   </button>
                   <ul class="dropdown-menu" role="menu">
                     <li><a class="show_note" data-id="{{post.id}}">Ver Nota</a></li>
-                    {% if post.user.id == user.id %}
+                    {% if post.user.id == user.id or user.roles[0] == "ROLE_ADMIN" %}
                       <li><a href="/admin/publicaciones/editar/{{post.id}}" >Editar</a></li>
+                    {% elseif post.agent %}
+                      {% if post.agent.id == user.id %}
+                        <li><a href="/admin/publicaciones/editar/{{post.id}}" >Editar</a></li>
+                      {% endif %}
                     {% endif %}
                     {% if post.status == 3 and post_user.role == 'ROLE_COMPANY' %}
                       <li><a href="#" class="show_agent" data-id="{{post.id}}">Datos Agente</a></li>
@@ -149,11 +154,13 @@
                         <li><a class="button-assign" id="{{post.id}}" href="#">
                         Asignar</a></li>
                     {% endif %}
-                    {% if post_user.role == 'ROLE_AGENT' and post.status == 3 %}
+                    {% if routes[1]['title'] != 'De Terceros' and post.agent %}
+                      {% if post.agent.id == user.id %}
                         <li><a class="button-unassign" id="{{post.id}}" href="#">
                         Des-Asignar</a></li>
+                      {% endif %}
                     {% endif %}
-                    {% if post_user.role == 'ROLE_ADMIN' or post.user.id == user.id %}
+                    {% if user.roles[0] == 'ROLE_ADMIN' or post.user.id == user.id %}
                         <li><a class="button-remove" id="{{post.id}}" href="#">
                         Eliminar</a></li>
                     {% endif %}
@@ -163,18 +170,7 @@
 
               </div>
 
-              <!-- NOTA -->
-              <div class="col-md-12 alert alert-info note_{{post.id}}" role="alert" style="margin: 5px;padding:5px;width:98%;display:none;" >
-                Nota: {{post.hidden_note}}
-              </div>
-              <!-- Datos de Agente -->
-              <!-- Needs to be published(3) and be a Inmobilaria Post -->
-              {% if post.status == 3 and post_user.role == 'ROLE_COMPANY' %}
-                <div class="col-md-12 alert alert-info agent_{{post.id}}" role="alert" style="margin: 5px;padding:5px;width:98%;display:none;" >
-                  <strong>Nombre:</strong> {{post_user.firstname_agent|capitalize}} {{post_user.lastname_agent|capitalize}} 
-                  <strong>Telefono:</strong>  {{post_user.phone_agent}} 
-                </div>
-              {% endif %}
+             
             </li>
           
           
