@@ -26,6 +26,16 @@
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <strong>¡Ha ocurrido un error!</strong> Intente nuevamente m&aacute;s tarde.
       </div>
+
+       <div id="successRemove" class="alert alert-success" style="display:none;">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>¡Removido exitosamente!</strong>
+      </div>
+
+      <div id="errorRemove" class="alert alert-danger" style="display:none;">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>¡Ha ocurrido un error!</strong> Intente nuevamente m&aacute;s tarde.
+      </div>
       <!-- Finish Actions Messages -->
 
       {% if hasPosts %}
@@ -96,9 +106,11 @@
                 
                 
               </div>
+              {% set post_user =  post_service.getAgent(post.id).data %}
               {% if post_service.getAgent(post.id).success %}
                 {% set post_user = post_service.getAgent(post.id).data %}
               {% endif %}
+              
               <div class="col-md-1" style="width:15%">
                   
 
@@ -116,14 +128,13 @@
                     {% else  %}
                       {% if post_user.role == 'ROLE_AGENT' %}
                         <span class="glyphicon glyphicon-info-sign"></span>Agente
+                        <h5>{{ post_user.agency_name_agent }} </h5>
+                        <h6 class="phone_{{post.id}}" style="display:none">{{ post_user.phone_agent }}</h6>
                       {% elseif post_user.role == 'ROLE_USER' %}
                         <span class="glyphicon glyphicon-info-sign"></span>Usuario
+                        <h5>{{ post_user.firstname }} {{post_user.lastname}} </h5>
+                        <h6 class="phone_{{post.id}}" style="display:none">{{ post_user.phone }}</h6>
                       {% endif %}
-                      
-                      <h5>{{ post_user.firstname}} {{post_user.lastname}} </h5>
-                      <h6 class="phone_{{post.id}}" style="display:none">{{ post_user.phone}}</h6>
-                      
-                  
                     {% endif %}
                   {% endif %}
 
@@ -139,7 +150,7 @@
                     Acciones <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a class="show_note" data-id="{{post.id}}">Ver Nota</a></li>
+                    <li><a class="show_note" id="{{post.id}}" href="#" data-id="{{post.id}}">Ver Nota</a></li>
                     {% if post.user.id == user.id or user.roles[0] == "ROLE_ADMIN" %}
                       <li><a href="/admin/publicaciones/editar/{{post.id}}" >Editar</a></li>
                     {% elseif post.agent %}
@@ -148,7 +159,7 @@
                       {% endif %}
                     {% endif %}
                     {% if post.status == 3 and post_user.role == 'ROLE_COMPANY' %}
-                      <li><a href="#" class="show_agent" data-id="{{post.id}}">Datos Agente</a></li>
+                      <li><a href="#" class="show_agent" id="{{post.id}}" data-id="{{post.id}}">Datos Agente</a></li>
                     {% endif %}
                     {% if (routes[1]['title'] == 'De Terceros')%}
                         <li><a class="button-assign" id="{{post.id}}" href="#">
@@ -170,13 +181,26 @@
 
               </div>
 
+              <!-- NOTA -->
+              <div class="col-md-12 alert alert-info note_{{post.id}}" role="alert" style="margin: 5px;padding:5px;width:98%;display:none;" >
+                <strong>Nota:</strong> {{post.hidden_note}}
+              </div>
+              <!-- Datos de Agente -->
+              <!-- Needs to be published(3) and be a Inmobilaria Post -->
+              {% if post.status == 3 and post_user.role == 'ROLE_COMPANY' %}
+                <div class="col-md-12 alert alert-info agent_{{post.id}}" role="alert" style="margin: 5px;padding:5px;width:98%;display:none;" >
+                  <strong>Nombre:</strong> {{post_user.agency_name_agent|capitalize}} 
+                  <strong>Telefono:</strong>  {{post_user.phone_agent}} 
+                </div>
+              {% endif %}
+
              
             </li>
           
           
         {% endfor %}
         {% if pagination.count !=1 %}                  
-            {% embed 'NucleusHubCmsBundle::Widget/pagination_search.html.twig' %}
+            {% embed 'NucleusHubCmsBundle::Widget/pagination.html.twig' %}
             {% endembed %}
         {% endif %}
       {% else %}
