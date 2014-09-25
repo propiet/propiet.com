@@ -113,7 +113,7 @@
                                 <div class="panel panel-default">
                                   <div class="panel-heading">
                                     <h2 class="panel-title fsize35 mBottom10">
-                                        {{data.location.address|capitalize|raw}},{{data.post_data.city.name|capitalize|raw}},{{data.post_data.region.name|capitalize|raw}}
+                                        {{data.location.address|capitalize|raw}} {{data.location.number - (data.location.number % 100)}},{{data.post_data.city.name|capitalize|raw}},{{data.post_data.region.name|capitalize|raw}}
                                     </h2>
                                     <h1 class="panel-title fsize35">
                                         <strong>

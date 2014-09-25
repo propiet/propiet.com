@@ -39,8 +39,11 @@
             <div class="col-md-8">
 			  	<div class="form-group">
 	                <label for="address" class="col-sm-2 control-label">Direcci&oacute;n</label>
-	                <div class="col-sm-10">
-	                  <input name="address" type="text" required class="form-control" data-parsley-required-message="Este campo es requerido" value="{{post.location.address}}" placeholder="Ingrese calle y n&uacute;mero">
+	                <div class="col-sm-6">
+	                  <input name="address" type="text" required class="form-control" data-parsley-required-message="Este campo es requerido" value="{{post.location.address}}" placeholder="Ingrese calle">
+	                 </div>
+	                <div class="col-sm-3">
+	                  <input name="number" type="number" value="{{post.location.number}}" required class="form-control" data-parsley-required-message="Este campo es requerido" placeholder="N&uacute;mero">
 	                </div>
 	            </div>
             </div>
