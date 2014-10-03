@@ -24,7 +24,7 @@ class UserController extends Controller
         $apiKey = $user->getToken();
        
 
-        if($user->getRoles()[0] == 'ROLE_AGENT') {
+        if($user->getRoles()[0] == 'ROLE_AGENT' or $user->getRoles()[0] == 'ROLE_ADMIN' ) {
             return $this->redirect( $this->get('router')->generate('admin_publications_list_red_interna'));            
         } else {
             return $this->redirect( $this->get('router')->generate('admin_publications_list_new'));
@@ -166,20 +166,15 @@ class UserController extends Controller
      */
     public function testAction(){
 
-       $queryParameters = array("status" => 3);
-        $search_service = $this->get('search_service');
+        $list_service = $this->get('list_service');
+        $response = $list_service->AllAgents();
 
-        $response = $search_service->getPostListQuery($queryParameters,$page);
-
-        if ($response == 'ERR_EMPTY_LIST') {
-            $hasPosts = false;
-        } else {
-            
-            if($response['objects']){
-                $posts = $response['objects'];
-            }
+        if($response){
+            $posts = $response;
+        }else{
+            $posts = 2;
         }
-
+        
         return $this->render('NucleusHubCmsBundle:Default:test.html.twig',
             array('posts'=> $posts));
     }

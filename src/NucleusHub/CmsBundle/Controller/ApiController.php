@@ -14,6 +14,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApiController extends Controller
 {
+    
+
+    /**
+     * @Route("/api/v1/agents/list.json", name="api_get_agents")
+     * @Template()
+     * 
+     */
+    public function getAgentsAction(Request $request)
+    {        
+        $list_service = $this->get('list_service');
+        $agents = $list_service->AllAgents();                
+        return new JsonResponse($agents);    
+    }
+    
     /**
      * @Route("/api/v1/categories/list.json", name="api_get_categories")
      * @Template()
@@ -377,9 +391,15 @@ class ApiController extends Controller
         $apiKey = $user->getToken();
 
         $post_id = $request->request->get('post_id');
-                  
+
+        if($request->request->get('agent_id')){
+            $agent = $request->request->get('agent_id');
+        } else{
+            $agent = $user->getId();
+        }
+                 
         $post =  $post_id;
-        $agent = $user->getId();
+        
                     
         $post_service = $this->get('post_service');
         $response = $post_service->assignAgent($post,$agent, $apiKey); 

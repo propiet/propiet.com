@@ -181,7 +181,18 @@
                     {% endif %}
                   </ul>
                 </div>
-            
+
+                {% if routes[1]['title'] == 'De Terceros' and user.roles[0] == 'ROLE_ADMIN' %}
+                <!-- Single button -->
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Asignar <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu list-agents" id={{post.id}} role="menu">
+                        
+                  </ul>
+                </div>
+                {% endif %}
 
               </div>
 

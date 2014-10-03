@@ -116,4 +116,20 @@ class ListService
         }      
         return $response;
     }
+    public function AllAgents(){
+
+        $url = "http://api.propiet.com/v1/agent/agents";//$this->apiUrls['base'].$this->apiUrls['list']['agents'];
+         
+        $parameters = array();   
+        $output = $this->api_caller->call(new HttpPost($url, $parameters));
+        
+        $data = json_decode($output, true);
+        if($data['response']['success'] == true){
+           $response = $data['response']['data']['list'];
+        } else {
+            $response = false;
+        }      
+        return $response;
+
+    }
 }
